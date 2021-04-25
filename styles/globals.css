@@ -1,16 +1,20 @@
-html,
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap");
+
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.prism-code {
+  font-family: "Fira Code", monospace;
 }
 
-* {
-  box-sizing: border-box;
-}
+/* .highlight-line {
+  background-color: rgb(53, 59, 69);
+  width: 100%;
+  border-left: 0.2em solid #f99;
+} */

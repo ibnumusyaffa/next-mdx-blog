@@ -7,7 +7,7 @@ function Test() {
 function Demo() {
   return (
     <div>
-      haloooooo! <Test></Test>
+      haloooooo! 
     </div>
   );
 }
