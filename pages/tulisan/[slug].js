@@ -3,7 +3,7 @@ import { getMDXComponent } from "mdx-bundler/client";
 import { bundleMDX } from "mdx-bundler";
 import fs from "fs";
 import path from "path";
-const { readdir, readFile } = fs.promises;
+const { readdir, readFile, lstat, access } = fs.promises;
 import Layout from "../../components/Layout";
 import Code from "../../components/Code";
 
@@ -39,27 +39,59 @@ async function getComponents(directory) {
   return components;
 }
 
-export async function getStaticProps({ params }) {
-  const POSTS_PATH = path.join(process.cwd(), "posts");
-  const postFilePath = path.join(POSTS_PATH, `${params.slug}`, "index.mdx");
-  const mdxSource = await readFile(postFilePath);
-  const components = await getComponents(
-    path.join(POSTS_PATH, `${params.slug}`)
-  );
-  const result = await bundleMDX(mdxSource, {
-    files: components,
-  });
-  const { code, frontmatter } = result;
+async function exists(path) {
+  try {
+    await access(path);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
-  return {
-    props: {
-      code,
-      frontmatter: {
-        ...frontmatter,
-        date: "2020",
+export async function getStaticProps({ params }) {
+  let slug = params.slug;
+  const POSTS_PATH = path.join(process.cwd(), "posts");
+  let isExist = await exists(path.join(POSTS_PATH, `${slug}.mdx`));
+  if (isExist) {
+    let postFilePath = path.join(POSTS_PATH, `${slug}.mdx`);
+    const mdxSource = await readFile(postFilePath);
+
+    const result = await bundleMDX(mdxSource, {
+      files: {},
+    });
+    const { code, frontmatter } = result;
+
+    return {
+      props: {
+        code,
+        frontmatter: {
+          ...frontmatter,
+          date: "2020",
+        },
       },
-    },
-  };
+    };
+  } else {
+    let postFilePath = path.join(POSTS_PATH, `${slug}`, "index.mdx");
+    const mdxSource = await readFile(postFilePath);
+
+    const components = await getComponents(
+      path.join(POSTS_PATH, `${params.slug}`)
+    );
+    const result = await bundleMDX(mdxSource, {
+      files: components,
+    });
+    const { code, frontmatter } = result;
+
+    return {
+      props: {
+        code,
+        frontmatter: {
+          ...frontmatter,
+          date: "2020",
+        },
+      },
+    };
+  }
 }
 
 export async function getStaticPaths() {
@@ -68,11 +100,21 @@ export async function getStaticPaths() {
 
   let paths = [];
   for (const slug of slugs) {
-    paths.push({
-      params: {
-        slug,
-      },
-    });
+    const stat = await lstat(path.join(process.cwd(), "posts", slug));
+
+    if (stat.isFile()) {
+      paths.push({
+        params: {
+          slug: slug.replace(/\.mdx?$/, ""),
+        },
+      });
+    } else {
+      paths.push({
+        params: {
+          slug,
+        },
+      });
+    }
   }
 
   return {

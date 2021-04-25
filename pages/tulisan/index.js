@@ -1,15 +1,16 @@
 import React from "react";
 import fs from "fs";
 import path from "path";
-const { readdir, readFile } = fs.promises;
+const { readdir, readFile, lstat } = fs.promises;
 import matter from "gray-matter";
 import Layout from "../../components/Layout";
 import { format } from "date-fns";
 import Link from "next/link";
+// import { da } from "date-fns/locale";
 function index({ posts }) {
   return (
     <Layout>
-      <div>
+      <div className="flex flex-col">
         {posts.map((item) => (
           <Link key={item.id} href={item.slug}>
             <a>{item.title}</a>
@@ -26,17 +27,32 @@ export async function getStaticProps({ params }) {
 
   let posts = [];
   for (const slug of slugs) {
-    const fileBuffer = await readFile(
-      path.join(process.cwd(), "posts", slug, "index.mdx")
-    );
+    const stat = await lstat(path.join(process.cwd(), "posts", slug));
 
-    const { data } = matter(fileBuffer);
+    if (stat.isFile()) {
+      const fileBuffer = await readFile(
+        path.join(process.cwd(), "posts", slug)
+      );
 
-    posts.push({
-      ...data,
-      date: format(data.date, "dd MMMM yyyy"),
-      slug: `/tulisan/${slug}`,
-    });
+      const { data } = matter(fileBuffer);
+   
+      posts.push({
+        ...data,
+        date: format(data.date, "dd MMMM yyyy"),
+        slug: `/tulisan/${slug.replace(/\.mdx?$/, "")}`,
+      });
+    } else {
+      const fileBuffer = await readFile(
+        path.join(process.cwd(), "posts", slug, "index.mdx")
+      );
+
+      const { data } = matter(fileBuffer);
+      posts.push({
+        ...data,
+        date: format(data.date, "dd MMMM yyyy"),
+        slug: `/tulisan/${slug}`,
+      });
+    }
   }
 
   return {
