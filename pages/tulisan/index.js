@@ -27,15 +27,13 @@ export async function getStaticProps({ params }) {
 
   let posts = [];
   for (const slug of slugs) {
-    const stat = await lstat(path.join(process.cwd(), "posts", slug));
+    const stat = await lstat(path.join(POSTS_PATH, slug));
 
     if (stat.isFile()) {
-      const fileBuffer = await readFile(
-        path.join(process.cwd(), "posts", slug)
-      );
+      const fileBuffer = await readFile(path.join(POSTS_PATH, slug));
 
       const { data } = matter(fileBuffer);
-   
+
       posts.push({
         ...data,
         date: format(data.date, "dd MMMM yyyy"),
@@ -43,7 +41,7 @@ export async function getStaticProps({ params }) {
       });
     } else {
       const fileBuffer = await readFile(
-        path.join(process.cwd(), "posts", slug, "index.mdx")
+        path.join(POSTS_PATH, slug, "index.mdx")
       );
 
       const { data } = matter(fileBuffer);

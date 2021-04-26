@@ -8,7 +8,7 @@ image: ./thumbnail.jpg
 ---
 
 
-In the previous article, we have learned about the [Input/Output pattern](/blog/thinking-in-functions) and how to use it when writing functions Today I'd like to continue the series by talking about one of the most powerful concepts of functional programming—higher-order functions.
+In the previous article, we have learned about the [Input/Output pattern](/blog/thinking-in-functions) and how to use it when writing functions Today I'd like to continue the series by talking about one of the most powerful concepts of functional programming—higher-order functions.asasaasasa
 
 ---
 
@@ -18,7 +18,7 @@ A _higher-order function_ is a function that accepts another function as an argu
 
 Here's an example of a higher-order function:
 
-```js
+```js filename="index.js"
 // Function `fn` accepts `anotherFn` as an argument,
 function fn(anotherFn) {
   // ...and calls it with `x` to get the value of `y`.
@@ -56,8 +56,27 @@ Both those requirements are related to the fact that higher-order functions acce
 
 To better understand this concept, let's build our own `map` function.
 
-```js focusedLines=8-10
+```js {3-4}
 function map(arr, mapFn) {
+  let result = []
+
+  for (let i = 0; i < arr.length; i++) {
+    // Get the current array member by index.
+    const member = arr[i]
+
+    // Call the `mapFn` function we accept as an argument,
+    // and provide the current array member to it.
+    const mappedValue = mapFn(member)
+
+    // Push the result of the `mapFn` function
+    // into the end array of transformed members.
+    result.push(mappedValue)
+  }
+
+  return result
+}
+
+function mapTo(arr, mapFn) {
   let result = []
 
   for (let i = 0; i < arr.length; i++) {
@@ -87,7 +106,7 @@ map([1, 2, 3], (number) => number * 2)
 
 You can see that the iteration details like the `for` cycle and the internal `results` array are not exposed to the `mapFn` function, and our custom `map` function controls precisely when to call the given `mapFn` argument and what data to provide it:
 
-```js lineNumberStart=10
+```js
 const mappedValue = mapFn(member)
 ```
 
@@ -95,7 +114,7 @@ const mappedValue = mapFn(member)
 
 The point of our `map` function is that it can do much more than the multiplication of numbers. In fact, as it accepts a function that controls what to do with each array member, I dare say our `map` function can do anything!
 
-```js showLineNumbers=false
+```js 
 map(['buy', 'gold'], (word) => word.toUpperCase())
 // ["BUY", "GOLD"]
 ```
@@ -108,7 +127,7 @@ A higher-order function may also return a function. In that case, it acts opposi
 
 Let's use the same `map` function we've written earlier, but now rewrite it so it returns a function:
 
-```js focusedLines=2,4
+```js
 // Instead of accepting the array straight away,
 function map(mapFn) {
   // ...we return a function that accepts that array.
@@ -129,7 +148,7 @@ function map(mapFn) {
 
 Since the `map` now accepts only one argument, we need to change the way we call it:
 
-```js showLineNumbers=false
+```js 
 map((number) => number * 2)([1, 2, 3])
 ```
 

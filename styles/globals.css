@@ -13,8 +13,8 @@ body {
   font-family: "Fira Code", monospace;
 }
 
-/* .highlight-line {
+.highlight-line {
   background-color: rgb(53, 59, 69);
   width: 100%;
   border-left: 0.2em solid #f99;
-} */
+}

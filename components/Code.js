@@ -14,7 +14,8 @@ const calculateLinesToHighlight = (meta) => {
   }
 };
 
-function Code({ children, className, metastring }) {
+function Code({ children, className,metastring, ...other }) {
+  console.log(other)
   if (!className) {
     return <code>{children}</code>
   }
