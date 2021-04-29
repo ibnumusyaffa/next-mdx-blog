@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.4.0",
+    "clsx": "^1.1.1",
     "date-fns": "^2.21.1",
     "gray-matter": "^4.0.3",
     "mdx-bundler": "^3.2.1",
@@ -16,9 +17,7 @@
     "parse-numeric-range": "^1.2.0",
     "prism-react-renderer": "^1.2.0",
     "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "react-syntax-highlighter": "^15.4.3",
-    "unist-util-visit": "^3.0.0"
+    "react-dom": "17.0.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.2.5",

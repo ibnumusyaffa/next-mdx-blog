@@ -6,20 +6,32 @@ import path from "path";
 const { readdir, readFile, lstat, access } = fs.promises;
 import Layout from "../../components/Layout";
 import Code from "../../components/Code";
-
+import formatDate from "../../helpers/formatDate";
+import Tag from "../../components/Tag";
 export default function Post({ code, frontmatter }) {
   const Component = React.useMemo(() => getMDXComponent(code), [code]);
   return (
     <Layout>
-      <div>
-        <div className="mb-5">
-          <h1 className="text-3xl font-semibold">{frontmatter.title}</h1>
-          <div className="mt-2 text-gray-700">{frontmatter.description}</div>
+      <div className="mb-10 mt-3 flex items-center flex-col">
+        <h1 className="text-4xl  font-semibold text-center">
+          {frontmatter.title}
+        </h1>
+        <div className="flex items-center space-x-3 mt-5">
+          <div className="text-sm text-gray-700">{frontmatter.date}</div>
+          <div>
+            <Tag variant={frontmatter.category_color}>
+              {frontmatter.category}
+            </Tag>
+          </div>
         </div>
-
-        <div className="prose  max-w-none">
-          <Component components={{ code: Code }} />
-        </div>
+      </div>
+      <div className="prose max-w-full">
+        <Component
+          components={{
+            code: Code,
+            pre: ({ children, ...other }) => children,
+          }}
+        />
       </div>
     </Layout>
   );
@@ -66,7 +78,7 @@ export async function getStaticProps({ params }) {
         code,
         frontmatter: {
           ...frontmatter,
-          date: "2020",
+          date: formatDate(frontmatter.date),
         },
       },
     };
@@ -87,7 +99,7 @@ export async function getStaticProps({ params }) {
         code,
         frontmatter: {
           ...frontmatter,
-          date: "2020",
+          date: formatDate(frontmatter.date),
         },
       },
     };
@@ -95,12 +107,12 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  const POSTS_PATH = path.join(process.cwd(), "posts");
-  const slugs = await readdir(POSTS_PATH);
+  let POSTS_PATH = path.join(process.cwd(), "posts");
+  let slugs = await readdir(POSTS_PATH);
 
   let paths = [];
-  for (const slug of slugs) {
-    const stat = await lstat(path.join(process.cwd(), "posts", slug));
+  for (let slug of slugs) {
+    let stat = await lstat(path.join(POSTS_PATH, slug));
 
     if (stat.isFile()) {
       paths.push({

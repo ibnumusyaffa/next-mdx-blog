@@ -14,10 +14,9 @@ const calculateLinesToHighlight = (meta) => {
   }
 };
 
-function Code({ children, className,metastring, ...other }) {
-  console.log(other)
+function Code({ children, className, metastring, ...other }) {
   if (!className) {
-    return <code>{children}</code>
+    return <code>{children}</code>;
   }
   const language = className.replace(/language-/, "");
   const shouldHighlightLine = calculateLinesToHighlight(metastring);
@@ -30,8 +29,8 @@ function Code({ children, className,metastring, ...other }) {
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <pre
-          className={className}
-          style={{ ...style, padding: "15px", overflowX: "auto" }}
+          className={`${className} overflow-x-auto p-3 rounded`}
+          style={style}
         >
           {tokens.map((line, i) => {
             let lineClass = "";
@@ -40,14 +39,14 @@ function Code({ children, className,metastring, ...other }) {
             }
             return (
               <div
-                className="table-row"
+                className="table-row "
                 key={i}
                 {...getLineProps({ line, key: i })}
               >
-                <span className="table-cell text-right select-none opacity-50 pr-5">
+                <span className="table-cell text-sm text-right select-none opacity-50 pr-5">
                   {i + 1}
                 </span>
-                <span className={`table-cell ${lineClass}`}>
+                <span className={`table-cell text-sm ${lineClass}`}>
                   {line.map((token, key) => (
                     <span key={key} {...getTokenProps({ token, key })} />
                   ))}

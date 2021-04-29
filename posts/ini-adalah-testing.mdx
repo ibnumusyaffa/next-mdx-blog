@@ -2,11 +2,11 @@
 id: 35db4a2a-0750-4699-a405-3996a6d99a99
 date: 2021-03-07
 category: Engineering
-title: 'Thinking in Functions'
+category_color: purple
+title: "Thinking in Functions"
 description: Let's take a dive into what "higher-order" functions are, what problems they solve, and learn how to use them in practice.
 image: ./thumbnail.jpg
 ---
-
 
 In the previous article, we have learned about the [Input/Output pattern](/blog/thinking-in-functions) and how to use it when writing functions Today I'd like to continue the series by talking about one of the most powerful concepts of functional programming—higher-order functions.asasaasasa
 
@@ -22,7 +22,7 @@ Here's an example of a higher-order function:
 // Function `fn` accepts `anotherFn` as an argument,
 function fn(anotherFn) {
   // ...and calls it with `x` to get the value of `y`.
-  const y = anotherFn(x)
+  const y = anotherFn(x);
 }
 ```
 
@@ -35,17 +35,16 @@ While this example is rather abstract and may look unfamiliar, there are multipl
 All those functions accept another function as an argument and that makes them higher-order functions. Let's analyze what that means by taking a closer look at `Array.prototype.map`:
 
 ```js
-const numbers = [1, 2, 3]
+const numbers = [1, 2, 3];
 
 // Go through each number in the `numbers` array
 // and multiply it by 2.
-numbers.map((number) => number * 2) // [2, 4, 6]
+numbers.map((number) => number * 2); // [2, 4, 6]
 ```
 
 You know that the `.map()` method goes (iterates) through each array member and applies some transformation to it. Notice how you never see the "goes through each array member" logic while using this method, you only describe the transformation to apply. That's because `.map()` is responsible for iteration, and when it comes to the point to map each value, it executes the function accepted as an argument.
 
 This is the key principle of higher-order functions: _logic encapsulation_.
-
 
 By doing so, the `.map()` function establishes a usage contract with us. As with any contract, there are some terms to make it work:
 
@@ -58,48 +57,48 @@ To better understand this concept, let's build our own `map` function.
 
 ```js {3-4}
 function map(arr, mapFn) {
-  let result = []
+  let result = [];
 
   for (let i = 0; i < arr.length; i++) {
     // Get the current array member by index.
-    const member = arr[i]
+    const member = arr[i];
 
     // Call the `mapFn` function we accept as an argument,
     // and provide the current array member to it.
-    const mappedValue = mapFn(member)
+    const mappedValue = mapFn(member);
 
     // Push the result of the `mapFn` function
     // into the end array of transformed members.
-    result.push(mappedValue)
+    result.push(mappedValue);
   }
 
-  return result
+  return result;
 }
 
 function mapTo(arr, mapFn) {
-  let result = []
+  let result = [];
 
   for (let i = 0; i < arr.length; i++) {
     // Get the current array member by index.
-    const member = arr[i]
+    const member = arr[i];
 
     // Call the `mapFn` function we accept as an argument,
     // and provide the current array member to it.
-    const mappedValue = mapFn(member)
+    const mappedValue = mapFn(member);
 
     // Push the result of the `mapFn` function
     // into the end array of transformed members.
-    result.push(mappedValue)
+    result.push(mappedValue);
   }
 
-  return result
+  return result;
 }
 ```
 
 Our custom `map` function can be used like so:
 
 ```js
-map([1, 2, 3], (number) => number * 2)
+map([1, 2, 3], (number) => number * 2);
 // Identical to:
 // [1, 2, 3].map((number) => number * 2)
 ```
@@ -107,15 +106,13 @@ map([1, 2, 3], (number) => number * 2)
 You can see that the iteration details like the `for` cycle and the internal `results` array are not exposed to the `mapFn` function, and our custom `map` function controls precisely when to call the given `mapFn` argument and what data to provide it:
 
 ```js
-const mappedValue = mapFn(member)
+const mappedValue = mapFn(member);
 ```
-
-
 
 The point of our `map` function is that it can do much more than the multiplication of numbers. In fact, as it accepts a function that controls what to do with each array member, I dare say our `map` function can do anything!
 
-```js 
-map(['buy', 'gold'], (word) => word.toUpperCase())
+```js
+map(["buy", "gold"], (word) => word.toUpperCase());
 // ["BUY", "GOLD"]
 ```
 
@@ -132,24 +129,24 @@ Let's use the same `map` function we've written earlier, but now rewrite it so i
 function map(mapFn) {
   // ...we return a function that accepts that array.
   return (arr) => {
-    let result = []
+    let result = [];
 
     // ...leaving the iteration logic as-is.
     for (let i = 0; i < arr.length; i++) {
-      const member = arr[i]
-      const mappedValue = mapFn(member)
-      result.push(mappedValue)
+      const member = arr[i];
+      const mappedValue = mapFn(member);
+      result.push(mappedValue);
     }
 
-    return result
-  }
+    return result;
+  };
 }
 ```
 
 Since the `map` now accepts only one argument, we need to change the way we call it:
 
-```js 
-map((number) => number * 2)([1, 2, 3])
+```js
+map((number) => number * 2)([1, 2, 3]);
 ```
 
 The `fn(x)(y)` call signature is not common in JavaScript. Moreover, it's rather confusing.
@@ -157,24 +154,24 @@ The `fn(x)(y)` call signature is not common in JavaScript. Moreover, it's rather
 > **History digression:** Not a long time ago such, call signature was used in [React](https://reactjs.org/) to describe higher-order components, so it may ring some distant hook-less bells.
 >
 > ```js showLineNumbers={false}
-> export default connect(options)(MyComponent)
+> export default connect(options)(MyComponent);
 > ```
 
 Don't worry, we don't have to abide by this unusual call signature. Instead, let's break that `map` function call into two separate functions.
 
 ```js
 // Calling `map` now returns a new function.
-const multiplyByTwo = map((number) => number * 2)
+const multiplyByTwo = map((number) => number * 2);
 
 // That returned function already knows it should
 // multiply each array item by 2.
 // Now we only call it with the actual array.
-multiplyByTwo([1, 2, 3]) // [2, 4, 6]
+multiplyByTwo([1, 2, 3]); // [2, 4, 6]
 
 // We can reuse the `multiplyByTwo` function
 // without having to repeat what it does,
 // only changing the data it gets.
-multiplyByTwo([4, 5, 6]) // [8, 10, 12]
+multiplyByTwo([4, 5, 6]); // [8, 10, 12]
 ```
 
 Our `map` function doesn't do any iteration on its own anymore, yet it _generates_ another function (`multiplyByTwo`) that _remembers_ what transformations to do, only waiting for us to provide it with data.
@@ -195,44 +192,42 @@ The most basic example is when you need to repeat a certain action N amount of t
 ```js
 function repeat(fn, times) {
   for (let i = 0; i < times; i++) {
-    fn()
+    fn();
   }
 }
 
 // Where are not concerned with "how" (iteration),
 // but focus on the "what" (declaration), making
 // this function declarative.
-repeat(() => console.log('Hello'), 3)
+repeat(() => console.log("Hello"), 3);
 ```
 
 By moving the imperative code to the implementation details of a higher-order function, we often gain improved code readability, making our logic easier to reason about. Compare these two examples: one with imperative code and another with declarative higher-order function:
 
 ```js
 // Imperative
-const letters = ['a', 'b', 'c']
-const nextLetters = []
+const letters = ["a", "b", "c"];
+const nextLetters = [];
 
 for (let i = 0; i < letters.length; i++) {
-  nextLetters.push(letters[i].toUpperCase())
+  nextLetters.push(letters[i].toUpperCase());
 }
 ```
 
 ```js
 // Declarative
-const letters = ['a', 'b', 'c']
-const nextLetters = map(letters, (letter) => letter.toUpperCase())
+const letters = ["a", "b", "c"];
+const nextLetters = map(letters, (letter) => letter.toUpperCase());
 ```
 
 While both examples map Array letters to upper case, you need much less cognitive effort to understand that intention behind the second example.
 
-
-
 It's also about reusing and composing—creating new logic by combining existing functions. Take a look at how the abstractions below give you an idea of what's happening without you peaking into how they are written:
 
 ```js
-map(ids, toUserDetail)
-map(users, toPosts)
-reduce(posts, toTotalLikes)
+map(ids, toUserDetail);
+map(users, toPosts);
+reduce(posts, toTotalLikes);
 ```
 
 ### Encapsulate logic
@@ -241,28 +236,28 @@ Let's say we have a `sort` function in our application:
 
 ```js
 function sort(comparator, array) {
-  array.sort(comparator)
+  array.sort(comparator);
 }
 ```
 
 We are using this function to sort multiple things by rating: products, books, users.
 
 ```js
-sort((left, right) => left.rating - right.rating, products)
-sort((left, right) => left.rating - right.rating, books)
-sort((left, right) => left.rating - right.rating, users)
+sort((left, right) => left.rating - right.rating, products);
+sort((left, right) => left.rating - right.rating, books);
+sort((left, right) => left.rating - right.rating, users);
 ```
 
 You can see how the comparator function is the same for each call, regardless of what data we're working with. We sort by rating _a lot_ in our app, so let's abstract that comparator into its own function and reuse it:
 
 ```js focusedLines=1-3
 function byRating(left, right) {
-  return left.rating - right.rating
+  return left.rating - right.rating;
 }
 
-sort(byRating, products)
-sort(byRating, books)
-sort(byRating, users)
+sort(byRating, products);
+sort(byRating, books);
+sort(byRating, users);
 ```
 
 That's better! Our sorting calls, however, still operate on the criteria-agnostic `sort` function. It's a minor thing, but we also have to import two functions (`sort` and `byRating`) anywhere we need to sort by rating.
@@ -271,10 +266,10 @@ Let's take the comparator out of the equation and lock it in a `sortByRating` fu
 
 ```js
 function sortByRating(array) {
-  sort(byRating, array)
+  sort(byRating, array);
 }
 
-sortByRating(products)
+sortByRating(products);
 ```
 
 Now the rating comparator is built-in into the `sortByRating` function and we can reuse it anywhere we sort by rating. It's a single function, it's short, it's great. Case closed.
@@ -283,15 +278,15 @@ Our application grows in size and requirements, and we find ourselves sorting no
 
 ```js focusedLines=2,6,10
 function sortByRating(array) {
-  sort(byRating, array)
+  sort(byRating, array);
 }
 
 function sortByReviews(array) {
-  sort(byReviews, array)
+  sort(byReviews, array);
 }
 
 function sortByDownloads(array) {
-  sort(byDownloads, array)
+  sort(byDownloads, array);
 }
 ```
 
@@ -302,8 +297,8 @@ We can approach this abstraction task with higher-order functions, which would a
 ```js
 function sort(comparator) {
   return (array) => {
-    array.sort(comparator)
-  }
+    array.sort(comparator);
+  };
 }
 ```
 
@@ -312,13 +307,13 @@ The `sort` function accepts a `comparator` and returns an applicator function th
 Now we can create multiple sorting functions encapsulating different criteria like so:
 
 ```js
-const sortByRating = sort(byRating)
-const sortByReviews = sort(byReviews)
-const sortByDownloads = sort(byDownloads)
+const sortByRating = sort(byRating);
+const sortByReviews = sort(byReviews);
+const sortByDownloads = sort(byDownloads);
 
-sortByRating(products)
-sortByReviews(books)
-sortByDownloads(songs)
+sortByRating(products);
+sortByReviews(books);
+sortByDownloads(songs);
 ```
 
 This is a great example of logic encapsulation and reuse. It's _beautiful_ also.
@@ -343,7 +338,7 @@ It's crucial to establish a clear separation between the responsibilities of a h
 > **Exercise:** Try to write your own `filter()` function: it accepts an array and a function that returns a `Boolean`. It returns a new array, with the members for which the argument function returned `true`:
 >
 > ```js showLineNumbers=false
-> filter([1, 3, 5], (number) => number > 2) // [3, 5]
+> filter([1, 3, 5], (number) => number > 2); // [3, 5]
 > ```
 >
 > Use the `map` function we've created earlier in this article as a reference.
@@ -356,27 +351,27 @@ While working on one of my projects, I've decided to create a custom function th
 
 ```js
 function createXHR(options) {
-  const req = new XMLHttpRequest()
-  req.open(options.method, options.url)
+  const req = new XMLHttpRequest();
+  req.open(options.method, options.url);
 
   return new Promise((resolve, reject) => {
-    req.addEventListener('load', resolve)
-    req.addEventListener('abort', reject)
-    req.addEventListener('error', reject)
-    req.send()
-  })
+    req.addEventListener("load", resolve);
+    req.addEventListener("abort", reject);
+    req.addEventListener("error", reject);
+    req.send();
+  });
 }
 ```
 
 I would then use that `createXHR` function in my tests like this:
 
 ```js
-test('handles an HTTPS GET request', async () => {
+test("handles an HTTPS GET request", async () => {
   const res = await createXHR({
-    method: 'GET',
-    url: 'https://test.server',
-  })
-})
+    method: "GET",
+    url: "https://test.server",
+  });
+});
 ```
 
 Thing is, I also needed to configure the request differently for various testing scenarios: set headers, send request body, or attach event listeners. To support that, I went to my `createXHR` function and extended its logic:
@@ -410,17 +405,17 @@ Instead, my helper function should have allowed for each individual call to conf
 ```js focusedLines=1-2,5-6
 // Accept a `middleware` function,
 function createXHR(middleware) {
-  const req = new XMLHttpRequest()
+  const req = new XMLHttpRequest();
 
   // ...that configures the given `XMLHttpRequest` instance,
-  middleware(req)
+  middleware(req);
 
   // ...and still promisifies its execution.
   return new Promise((resolve, reject) => {
-    req.addEventListener('loadend', resolve)
-    req.addEventListener('abort', reject)
-    req.addEventListener('error', reject)
-  })
+    req.addEventListener("loadend", resolve);
+    req.addEventListener("abort", reject);
+    req.addEventListener("error", reject);
+  });
 }
 ```
 
@@ -429,21 +424,21 @@ function createXHR(middleware) {
 Notice how cleaner that function becomes as it delegates the request configuration to a `middleware` function. With that, each test can provide its own way to set up a request and still receive a Promise in return.
 
 ```js focusedLines=3-5,11-13
-test('submits a new blog post', async () => {
+test("submits a new blog post", async () => {
   const req = await createXHR((req) => {
-    req.open('POST', '/posts')
-    req.setRequestHeader('Content-Type', 'application/json')
-    req.send(JSON.stringify({ title: 'Thinking in functions', part: 2 }))
-  })
-})
+    req.open("POST", "/posts");
+    req.setRequestHeader("Content-Type", "application/json");
+    req.send(JSON.stringify({ title: "Thinking in functions", part: 2 }));
+  });
+});
 
-test('handles error gracefully', async () => {
+test("handles error gracefully", async () => {
   const req = await createXHR((req) => {
-    req.open('GET', '/posts/thinking-in-functions')
-    req.addEventListener('error', handleError)
-    req.send()
-  })
-})
+    req.open("GET", "/posts/thinking-in-functions");
+    req.addEventListener("error", handleError);
+    req.send();
+  });
+});
 ```
 
 ---
