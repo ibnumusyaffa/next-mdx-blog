@@ -27,8 +27,8 @@ function index({ posts }) {
     <Layout>
       <div className="flex flex-col space-y-8">
         <div>
-          <div className="space-y-2 text-center">
-            <div className="text-3xl font-bold text-gray-800">Tulisan</div>
+          <div className="space-y-2">
+            <div className="text-3xl font-bold text-gray-800">Blog</div>
             <div className="text-gray-700">
               Tulisan seputar pengembangan perangkat lunak dan teknologi lainnya
             </div>
@@ -93,7 +93,7 @@ export async function getStaticProps({ params }) {
       posts.push({
         ...data,
         date: formatDate(data.date),
-        slug: `/tulisan/${slug.replace(/\.mdx?$/, "")}`,
+        slug: `/blog/${slug.replace(/\.mdx?$/, "")}`,
       });
     } else {
       const fileBuffer = await readFile(
@@ -104,7 +104,7 @@ export async function getStaticProps({ params }) {
       posts.push({
         ...data,
         date: formatDate(data.date),
-        slug: `/tulisan/${slug}`,
+        slug: `/blog/${slug}`,
       });
     }
   }

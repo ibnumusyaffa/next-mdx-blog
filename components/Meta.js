@@ -1,11 +1,20 @@
 import React from "react";
 import Head from "next/head";
-function Meta({ title, description, thumbnail, url = "" }) {
-//   url = process.env.NEXT_PUBLIC_URL + url
+function Meta({
+  title = "Ibnu Musyaffa",
+  description = "Tulisan seputar pengembangan perangkat lunak dan teknologi lainnya",
+  thumbnail = "default.png",
+  url = "",
+}) {
+  url = process.env.NEXT_PUBLIC_URL + url;
+  thumbnail = process.env.NEXT_PUBLIC_URL + thumbnail;
   return (
     <Head>
       <title>{title}</title>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+      ></meta>
       <meta name="title" content={title} />
       <meta name="description" content={description} />
 

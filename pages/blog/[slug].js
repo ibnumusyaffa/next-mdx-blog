@@ -8,10 +8,17 @@ import Layout from "../../components/Layout";
 import Code from "../../components/Code";
 import formatDate from "../../helpers/formatDate";
 import Tag from "../../components/Tag";
-export default function Post({ code, frontmatter }) {
+export default function Post({ code, frontmatter, slug }) {
+
   const Component = React.useMemo(() => getMDXComponent(code), [code]);
   return (
-    <Layout>
+    <Layout
+      meta={{
+        title: frontmatter.title,
+        description: frontmatter.description,
+        url: `blog/${slug}`,
+      }}
+    >
       <div className="mb-10 mt-3 flex items-center flex-col">
         <h1 className="text-4xl  font-semibold text-center">
           {frontmatter.title}
@@ -62,6 +69,7 @@ async function exists(path) {
 
 export async function getStaticProps({ params }) {
   let slug = params.slug;
+
   const POSTS_PATH = path.join(process.cwd(), "posts");
   let isExist = await exists(path.join(POSTS_PATH, `${slug}.mdx`));
   if (isExist) {
@@ -75,6 +83,7 @@ export async function getStaticProps({ params }) {
 
     return {
       props: {
+        slug: params.slug,
         code,
         frontmatter: {
           ...frontmatter,
@@ -96,6 +105,7 @@ export async function getStaticProps({ params }) {
 
     return {
       props: {
+        slug: params.slug,
         code,
         frontmatter: {
           ...frontmatter,
