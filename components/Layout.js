@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Meta from "../components/Meta";
+import MenuItem from "../components/MenuItem";
 function Layout({ children, meta }) {
   return (
     <div>
@@ -17,17 +18,10 @@ function Layout({ children, meta }) {
             </a>
           </Link>
 
-          <div className="flex space-x-5 h-full">
-            <Link href="/">
-              <a className="text-blue-500 px-5 h-full border-b-2 border-blue-500 flex items-center">
-                <div>Beranda</div>
-              </a>
-            </Link>
-            <Link href="/tentang">
-              <a className="text-gray-700 h-full flex items-center">
-                <div>Tentang</div>
-              </a>
-            </Link>
+          <div className="flex  h-full">
+            <MenuItem href="/">Beranda</MenuItem>
+            <MenuItem href="/tulisan">Tulisan</MenuItem>
+            <MenuItem href="/tentang">Tentang</MenuItem>
           </div>
         </div>
       </div>
