@@ -1,30 +1,63 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Meta from "../components/Meta";
 import MenuItem from "../components/MenuItem";
+import MenuItemMobile from "../components/MenuItemMobile";
+import MenuIcon from "../components/icons/Menu";
+import CloseIcon from "../components/icons/Close";
+import clsx from "clsx";
+
+
+
 function Layout({ children, meta }) {
+  let [show, setShow] = useState(false);
+
+  function toggle() {
+    setShow((prev) => !prev);
+  }
+
+  let headerClass = clsx(" h-16 flex justify-center", {
+    "border-b border-gray-200 ": !show,
+  });
   return (
     <div>
       <Meta {...meta}></Meta>
       <div className="bg-gradient-to-r from-green-400 via-blue-400 to-pink-400 h-0.5"></div>
-      <div className="border-b border-gray-200  h-16 flex justify-center">
-        <div className="px-3 md:px-0 w-full md:w-1/2   h-full flex items-center justify-between">
+      <div className={headerClass}>
+        <div className="px-5 md:px-0 w-full md:w-1/2   h-full flex items-center justify-between">
           <Link href="/">
             <a className="flex items-center space-x-3">
               <div className="w-10 h-10 rounded-full bg-gradient-to-r from-green-400 to-blue-500"></div>
-              <div className=" text-gray-700 hidden md:block">
+              <div className=" text-gray-700">
                 Ibnu Musyaffa
               </div>
             </a>
           </Link>
 
-          <div className="flex  h-full">
+          <div className="hidden md:flex h-full">
             <MenuItem href="/">Beranda</MenuItem>
             <MenuItem href="/blog">Blog</MenuItem>
             <MenuItem href="/tentang">Tentang</MenuItem>
           </div>
+          {show ? (
+            <button className="md:hidden" onClick={toggle}>
+              <CloseIcon></CloseIcon>
+            </button>
+          ) : (
+            <button className="md:hidden" onClick={toggle}>
+              <MenuIcon></MenuIcon>
+            </button>
+          )}
         </div>
       </div>
+      {show ? (
+        <div className="border-b border-gray-200">
+          <MenuItemMobile href="/">Beranda</MenuItemMobile>
+          <MenuItemMobile href="/blog">Blog</MenuItemMobile>
+          <MenuItemMobile href="/tentang">Tentang</MenuItemMobile>
+        </div>
+      ) : null}
+
       <div className="flex items-center justify-center py-5">
         <div className="px-5 md:px-0 w-full md:w-1/2">{children}</div>
       </div>
