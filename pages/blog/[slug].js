@@ -8,8 +8,8 @@ import Layout from "../../components/Layout";
 import Code from "../../components/Code";
 import formatDate from "../../helpers/formatDate";
 import Tag from "../../components/Tag";
+import Image from "next/image";
 export default function Post({ code, frontmatter, slug }) {
-
   const Component = React.useMemo(() => getMDXComponent(code), [code]);
   return (
     <Layout
@@ -19,11 +19,11 @@ export default function Post({ code, frontmatter, slug }) {
         url: `blog/${slug}`,
       }}
     >
-      <div className="mb-10 mt-3 flex items-center flex-col">
-        <h1 className="text-4xl  font-semibold text-center">
+      <div className="mb-10 mt-3 flex md:items-center flex-col">
+        <h1 className="text-3xl md:text-4xl  font-semibold md:text-center">
           {frontmatter.title}
         </h1>
-        <div className="flex items-center space-x-3 mt-5">
+        <div className="flex space-x-3 mt-5">
           <div className="text-sm text-gray-700">{frontmatter.date}</div>
           <div>
             <Tag variant={frontmatter.category_color}>
@@ -32,6 +32,12 @@ export default function Post({ code, frontmatter, slug }) {
           </div>
         </div>
       </div>
+      {frontmatter.thumbnail ? (
+        <div className="mb-10">
+          <Image className="rounded" src={"/" + frontmatter.thumbnail} layout="responsive" width={1920} height={1080} />
+        </div>
+      ) : null}
+
       <div className="prose max-w-full">
         <Component
           components={{
