@@ -7,7 +7,7 @@ function Meta({
   url = "",
 }) {
   url = process.env.NEXT_PUBLIC_URL + url;
-  thumbnail = process.env.NEXT_PUBLIC_URL + thumbnail;
+  thumbnail = process.env.NEXT_PUBLIC_URL + (thumbnail ?? "default.png");
   return (
     <Head>
       <title>{title}</title>

@@ -8,7 +8,7 @@ function Layout({ children, meta }) {
       <Meta {...meta}></Meta>
       <div className="bg-gradient-to-r from-green-400 via-blue-400 to-pink-400 h-0.5"></div>
       <div className="border-b border-gray-200  h-16 flex justify-center">
-        <div className="px-5 md:px-0 w-full md:w-1/2   h-full flex items-center justify-between">
+        <div className="px-3 md:px-0 w-full md:w-1/2   h-full flex items-center justify-between">
           <Link href="/">
             <a className="flex items-center space-x-3">
               <div className="w-10 h-10 rounded-full bg-gradient-to-r from-green-400 to-blue-500"></div>

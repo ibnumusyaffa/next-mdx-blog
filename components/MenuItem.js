@@ -8,8 +8,8 @@ function MenuItem({ children, href }) {
   let parentHref = `/${href.split("/")[1]}`;
 
   let isActive = currentParentRoute === parentHref ? true : false;
-  let classNames = clsx("px-4 h-full  flex items-center", {
-    "text-blue-500 border-b-2 border-blue-500": isActive,
+  let classNames = clsx("px-3 md:px-5 h-full box-content text-sm  md:text-base  flex items-center", {
+    "text-blue-500 border-b-2 border-blue-500 font-semibold": isActive,
     "text-gray-700": !isActive,
   });
   return (
