@@ -28,7 +28,7 @@ function index({ posts }) {
       <div className="flex flex-col space-y-8">
         <div>
           <div className="space-y-2 text-center">
-            <div className="text-2xl font-bold"># Tulisan</div>
+            <div className="text-3xl font-bold text-gray-800">Tulisan</div>
             <div className="text-gray-700">
               Tulisan seputar pengembangan perangkat lunak dan teknologi lainnya
             </div>
