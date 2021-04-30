@@ -17,6 +17,7 @@ export default function Post({ code, frontmatter, slug }) {
         title: frontmatter.title,
         description: frontmatter.description,
         url: `blog/${slug}`,
+        thumbnail: frontmatter.thumbnail,
       }}
     >
       <div className="mb-10 mt-3 flex md:items-center flex-col">
@@ -34,7 +35,13 @@ export default function Post({ code, frontmatter, slug }) {
       </div>
       {frontmatter.thumbnail ? (
         <div className="mb-10">
-          <Image className="rounded" src={"/" + frontmatter.thumbnail} layout="responsive" width={1920} height={1080} />
+          <Image
+            className="rounded"
+            src={"/" + frontmatter.thumbnail}
+            layout="responsive"
+            width={1920}
+            height={1080}
+          />
         </div>
       ) : null}
 
