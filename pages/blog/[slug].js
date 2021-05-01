@@ -20,7 +20,7 @@ export default function Post({ code, frontmatter, slug }) {
         thumbnail: frontmatter.thumbnail,
       }}
     >
-      <article>
+      <article  className="mb-10">
         <header className="mb-10 mt-3 flex md:items-center flex-col">
           <h1 className="text-3xl md:text-4xl  font-semibold md:text-center">
             {frontmatter.title}

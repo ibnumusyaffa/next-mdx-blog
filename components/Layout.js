@@ -31,10 +31,9 @@ function Layout({ children, meta }) {
               </a>
             </Link>
 
-            <div className="hidden md:flex h-full">
+            {/* <div className="hidden md:flex h-full">
               <MenuItem href="/">Beranda</MenuItem>
               <MenuItem href="/blog">Blog</MenuItem>
-              <MenuItem href="/tentang">Tentang</MenuItem>
             </div>
             {show ? (
               <button className="md:hidden" onClick={toggle}>
@@ -44,21 +43,30 @@ function Layout({ children, meta }) {
               <button className="md:hidden" onClick={toggle}>
                 <MenuIcon></MenuIcon>
               </button>
-            )}
+            )} */}
           </div>
         </div>
         {show ? (
           <div className="border-b border-gray-200">
             <MenuItemMobile href="/">Beranda</MenuItemMobile>
             <MenuItemMobile href="/blog">Blog</MenuItemMobile>
-            <MenuItemMobile href="/tentang">Tentang</MenuItemMobile>
           </div>
         ) : null}
       </nav>
 
-      <div className="flex items-center justify-center py-5">
+      <div
+        className="flex justify-center py-5"
+        style={{
+          minHeight: "calc(100vh - 8rem)",
+        }}
+      >
         <main className="px-5 md:px-0 w-full md:w-1/2">{children}</main>
       </div>
+      <footer className="flex justify-center">
+        <div className="px-5 md:px-0 w-full md:w-1/2 text-gray-600 text-sm border-t border-gray-200 py-5 text-center">
+          © 2021. Ibnu Musyaffa
+        </div>
+      </footer>
     </React.Fragment>
   );
 }
