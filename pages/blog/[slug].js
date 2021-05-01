@@ -20,39 +20,41 @@ export default function Post({ code, frontmatter, slug }) {
         thumbnail: frontmatter.thumbnail,
       }}
     >
-      <div className="mb-10 mt-3 flex md:items-center flex-col">
-        <h1 className="text-3xl md:text-4xl  font-semibold md:text-center">
-          {frontmatter.title}
-        </h1>
-        <div className="flex space-x-3 mt-5">
-          <div className="text-sm text-gray-700">{frontmatter.date}</div>
-          <div>
-            <Tag variant={frontmatter.category_color}>
-              {frontmatter.category}
-            </Tag>
+      <article>
+        <header className="mb-10 mt-3 flex md:items-center flex-col">
+          <h1 className="text-3xl md:text-4xl  font-semibold md:text-center">
+            {frontmatter.title}
+          </h1>
+          <div className="flex space-x-3 mt-5">
+            <div className="text-sm text-gray-700">{frontmatter.date}</div>
+            <div>
+              <Tag variant={frontmatter.category_color}>
+                {frontmatter.category}
+              </Tag>
+            </div>
           </div>
-        </div>
-      </div>
-      {frontmatter.thumbnail ? (
-        <div className="mb-10">
-          <Image
-            className="rounded"
-            src={"/" + frontmatter.thumbnail}
-            layout="responsive"
-            width={1920}
-            height={1080}
+        </header>
+        {frontmatter.thumbnail ? (
+          <div className="mb-10">
+            <Image
+              className="rounded"
+              src={"/" + frontmatter.thumbnail}
+              layout="responsive"
+              width={1920}
+              height={1080}
+            />
+          </div>
+        ) : null}
+
+        <div className="prose max-w-full">
+          <Component
+            components={{
+              code: Code,
+              pre: ({ children, ...other }) => children,
+            }}
           />
         </div>
-      ) : null}
-
-      <div className="prose max-w-full">
-        <Component
-          components={{
-            code: Code,
-            pre: ({ children, ...other }) => children,
-          }}
-        />
-      </div>
+      </article>
     </Layout>
   );
 }
