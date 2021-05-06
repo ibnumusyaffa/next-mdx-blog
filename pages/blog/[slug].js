@@ -34,7 +34,7 @@ export default function Post({ code, frontmatter, slug }) {
             </div>
           </div>
         </header>
-        {frontmatter.thumbnail ? (
+        {frontmatter.thumbnail && frontmatter.show_thumbnail ? (
           <div className="mb-10">
             <Image
               className="rounded"
