@@ -49,7 +49,7 @@ export default function Post({ code, frontmatter, slug }) {
         <div className="prose max-w-full">
           <Component
             components={{
-              code: Code,
+              // code: Code,
               pre: ({ children, ...other }) => children,
             }}
           />
