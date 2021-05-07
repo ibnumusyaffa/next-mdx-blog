@@ -3,23 +3,12 @@ import Highlight, { defaultProps } from "prism-react-renderer";
 import theme from "prism-react-renderer/themes/nightOwl";
 import rangeParser from "parse-numeric-range";
 
-const calculateLinesToHighlight = (meta) => {
-  const RE = /{([\d,-]+)}/;
-  if (RE.test(meta)) {
-    const strlineNumbers = RE.exec(meta)[1];
-    const lineNumbers = rangeParser(strlineNumbers);
-    return (index) => lineNumbers.includes(index + 1);
-  } else {
-    return () => false;
-  }
-};
-
-function Code({ children, className, metastring, ...other }) {
+function Code({ children, className, metastring }) {
   if (!className) {
     return <code>{children}</code>;
   }
   const language = className.replace(/language-/, "");
-  const shouldHighlightLine = calculateLinesToHighlight(metastring);
+
   return (
     <Highlight
       {...defaultProps}
@@ -33,9 +22,9 @@ function Code({ children, className, metastring, ...other }) {
           style={style}
         >
           {tokens.map((line, i) => {
-            let lineClass = "";
-            if (shouldHighlightLine(i)) {
-              lineClass = "highlight-line";
+            
+            if (tokens.length - 1 == i) {
+              return null;
             }
             return (
               <div
@@ -46,7 +35,7 @@ function Code({ children, className, metastring, ...other }) {
                 <span className="table-cell text-sm text-right select-none opacity-50 pr-5">
                   {i + 1}
                 </span>
-                <span className={`table-cell text-sm ${lineClass}`}>
+                <span className="table-cell text-sm">
                   {line.map((token, key) => (
                     <span key={key} {...getTokenProps({ token, key })} />
                   ))}

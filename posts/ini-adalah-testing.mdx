@@ -3,13 +3,13 @@ id: 35db4a2a-0750-4699-a405-3996a6d99a99
 date: 2021-05-06
 category: React
 category_color: blue
-title: "Mengatur asynchronous data lebih mudah dengan React Query"
+title: "Manajemen asynchronous data lebih mudah dengan React Query"
 description: "Disini kita akan belajar bagaimana react-query mempermudah bagaimana kita mengatur asynchronous data di aplikasi react, mulai dari fetching, caching, synchronizing dan update server data"
 thumbnail: blog/react-query.png
 show_thumbnail: false
 ---
 
-Salah satu hal yang sering kita hadapi saat membangun aplikasi dengan React adalah bagaimana kita memutuskan pola yang cocok untuk menarik data dari _server_. Salah satu solusi yang umum dilakukan biasanya kita menarik data tersebut dilevel component dengan bantuan `useState` dan `useEffect`. 
+Salah satu hal yang sering kita hadapi saat membangun aplikasi dengan React adalah bagaimana memutuskan pola yang cocok untuk menarik data dari _server_. Salah satu solusi yang umum dilakukan biasanya kita menarik data tersebut dilevel component dengan bantuan `useState` dan `useEffect`. 
 
 ```javascript
 function App() {
@@ -40,26 +40,33 @@ export default App;
 
 ```
 
-contoh  mengambil data *profile* dengan react hooks, kode diatas anggap bekerja dengan baik, namun ada beberapa masalah ketika aplikasi yang sedang kita kerjakan semakin membesar codebasenya
+contoh  mengambil data *profile* dengan react hooks, kode diatas bekerja dengan baik, namun ada beberapa masalah ketika aplikasi yang sedang kita kerjakan semakin membesar codebasenya
 
-- harus membuat 3 state baru lagi (*loading*, *error*, *data*)  ketika akan melakukan penarikan data yang berbeda (tentu saja, hal ini dapat diextract menjadi reusable react hooks, tapi kali ini kita akan pakai React Query saja)
-- Bagaimana jika ada 3 component yang berbeda hirarkinya menarik data yang sama ? tentu network request menjadi 3 kali
-- Bagaimana jika data profile yang kamu tarik beberapa waktu kemudian sudah berubah disisi server dan sudah dianggap kadaluarsa ? bagaimana kamu menghandlenya dengan efisien dan mudah ?
+- Minimal harus membuat 3 state baru lagi (*loading*, *error*, *data*)  ketika akan melakukan penarikan data yang berbeda (tentu saja, hal ini dapat diextract menjadi reusable react hooks, tapi kali ini kita akan pakai React Query saja)
+- Bagaimana jika ada 4 component yang berbeda secara hirarki menarik data yang sama ? tentu network request menjadi 4 kali
+- Bagaimana jika data profile yang kamu tarik beberapa waktu kemudian sudah berubah disisi server dan dianggap kadaluarsa ? bagaimana kamu mengupate data tersebut dengan mudah dan efisien?
 
-Salah satu pendekatan lain yang saya lihat dikomunitas React (apalagi yang menggunakan ***Redux***) adalah membuat fungsi penarikan data menggunakan library seperti ***Redux Thunk*** atau ***Redux Saga***, dimana solusi tersebut masih bisa terdapat kekurangan seperti poin-poin diatas tetapi juga melahirkan kode yang bisa dibilang tidak simple  (terutama bagi saya).
+Salah satu pendekatan lain yang saya cukup popular (apalagi yang menggunakan ***Redux***) adalah membuat fungsi penarikan data menggunakan library seperti ***Redux Thunk*** atau ***Redux Saga***, solusi tersebut bisa dibilang masih terdapat kekurangan seperti poin-poin diatas dan juga melahirkan kode lumayan kompleks.
 
 ## Berkenalan dengan React Query
 
 ***React Query*** adalah salah satu library data fetching dimana library ini juga bisa difungsikan sebagai state management, tetapi berbeda dengan state management umumnya semisal Redux, Mobx, Zustand. React Query bisa dibilang state management khusus menangani data server. 
 
-Bisa dibilang poin intinya seperti ini
-- Server State : state semisal data profile, data transaksi dll. maka akan dimanage oleh React Query.
-- Client State : state semisal hide show Menu/Modal, maka akan dimanage useState bawaan react atau library state management (Redux,Zustand dll)
-
 Beberapa fitur React Query yang menarik
-- Menarik data dengan mudah
-- Caching : Menyimpan hasil request sebagai cache
-- Deduping : Membuat beberapa network request yang sama menjadi 1 network request
-- Tahu kapan data akan kadaluarsa dan mengupdatenya secara otomatis, ataupun manual
+- Menarik data dengan mudah, state loading,error dst. sudah terbuat otomatis. 
+- Caching, Menyimpan hasil request sebagai cache
+- Deduping, Membuat beberapa network request yang sama menjadi 1 network request
+- Tahu kapan data akan kadaluarsa dan mengupdatenya secara otomatis maupun manual
 
 ## Menggunakan React Query
+
+Jika kita menggunakan React Query maka kita akan membagi state menjadi 2 kategori besar
+- ***Server State***, semisal data profile, data transaksi dll. maka akan dimanage oleh React Query.
+- ***Client State*** (baik global state maupun local state) semisal hide show Menu/Modal, terutama state yang tidak persistent/tidak disimpan, maka akan diatur dengan `useState` bawaan react atau library state management (Redux, Mobx, Zustand dll.)
+
+Ditutorial kali ini kita akan menggunakan NextJS sebagai boilerplate awal aplikasi react kita, untuk meng generate project NextJS jalankan perintah berikut
+
+```bash
+npx create-next-app
+```
+ikuti instruksi dari installer tersebut, dan simpan projectmu di folder yang diingikan, semisal `latihan-react-query`
