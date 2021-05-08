@@ -9,7 +9,7 @@ function MenuItem({ children, href }) {
 
   let isActive = currentParentRoute === parentHref ? true : false;
   let classNames = clsx(
-    "h-12 flex items-center px-5",
+    "h-16 flex items-center justify-end px-5",
     {
       "text-blue-500 font-semibold": isActive,
       "text-gray-700": !isActive,

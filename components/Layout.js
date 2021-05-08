@@ -25,15 +25,14 @@ function Layout({ children, meta }) {
         <div className={navClass}>
           <div className="px-5 md:px-0 w-full md:w-1/2   h-full flex items-center justify-between">
             <Link href="/">
-              <a className="flex items-center space-x-3">
+              <a className="flex items-center space-x-3 hover:underline">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-r from-green-400 to-blue-500"></div>
                 <div className=" text-gray-700">Ibnu Musyaffa</div>
               </a>
             </Link>
 
-            {/* <div className="hidden md:flex h-full">
-              <MenuItem href="/">Beranda</MenuItem>
-              <MenuItem href="/blog">Blog</MenuItem>
+            <div className="hidden md:flex h-full">
+              <MenuItem href="/tentang">Tentang</MenuItem>
             </div>
             {show ? (
               <button className="md:hidden" onClick={toggle}>
@@ -43,13 +42,14 @@ function Layout({ children, meta }) {
               <button className="md:hidden" onClick={toggle}>
                 <MenuIcon></MenuIcon>
               </button>
-            )} */}
+            )}
           </div>
         </div>
         {show ? (
-          <div className="border-b border-gray-200">
-            <MenuItemMobile href="/">Beranda</MenuItemMobile>
-            <MenuItemMobile href="/blog">Blog</MenuItemMobile>
+          <div className="relative h-56">
+            <div className="border-b flex flex-col border-gray-200 absolute w-full bg-white opacity-90">
+              <MenuItemMobile href="/tentang">Tentang</MenuItemMobile>
+            </div>
           </div>
         ) : null}
       </nav>
