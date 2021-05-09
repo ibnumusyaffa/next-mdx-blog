@@ -18,7 +18,7 @@ function Code({ children, className, metastring }) {
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <pre
-          className={`${className} overflow-x-auto p-3 rounded`}
+          className={`${className} overflow-x-auto p-3  -mx-5 md:mx-0 md:rounded`}
           style={style}
         >
           {tokens.map((line, i) => {
