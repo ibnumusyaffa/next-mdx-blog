@@ -47,7 +47,7 @@ function Layout({ children, meta }) {
         </div>
         {show ? (
           <div className="relative">
-            <div className="border-b flex flex-col border-gray-200 absolute w-full bg-white opacity-90">
+            <div className="border-b flex flex-col border-gray-200 absolute w-full bg-white opacity-95">
               <MenuItemMobile href="/tentang">Tentang</MenuItemMobile>
             </div>
           </div>
