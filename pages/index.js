@@ -92,7 +92,6 @@ export async function getStaticProps({ params }) {
 
       posts.push({
         ...data,
-        date: formatDate(data.date),
         slug: `/blog/${slug.replace(/\.mdx?$/, "")}`,
       });
     } else {
@@ -103,15 +102,22 @@ export async function getStaticProps({ params }) {
       const { data } = matter(fileBuffer);
       posts.push({
         ...data,
-        date: formatDate(data.date),
         slug: `/blog/${slug}`,
       });
     }
   }
 
+  let sorted = posts.slice().sort((a, b) => b.date - a.date);
+  let changeDate = sorted.map((item) => {
+    return {
+      ...item,
+      date: formatDate(item.date),
+    };
+  });
+
   return {
     props: {
-      posts,
+      posts: changeDate,
     },
   };
 }
