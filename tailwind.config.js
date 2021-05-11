@@ -1,5 +1,6 @@
+const colors = require("tailwindcss/colors");
 module.exports = {
-  mode: 'jit',
+  mode: "jit",
   purge: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   darkMode: false, // or 'media' or 'class'
   theme: {
@@ -9,10 +10,14 @@ module.exports = {
           //remove default style syntax hightligh
           css: {
             pre: null,
+            code:null,
+            'code::before': null,
+            'code::after': null,
           },
         },
       },
     },
+    colors
   },
   variants: {
     extend: {},

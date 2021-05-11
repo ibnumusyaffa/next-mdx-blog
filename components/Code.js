@@ -5,7 +5,11 @@ import rangeParser from "parse-numeric-range";
 
 function Code({ children, className, metastring }) {
   if (!className) {
-    return <code>{children}</code>;
+    return (
+      <code className="text-pink-700 clear-both py-0.5 bg-pink-50 px-2 text-sm">
+        {children}
+      </code>
+    );
   }
   const language = className.replace(/language-/, "");
 
@@ -22,7 +26,6 @@ function Code({ children, className, metastring }) {
           style={style}
         >
           {tokens.map((line, i) => {
-            
             if (tokens.length - 1 == i) {
               return null;
             }

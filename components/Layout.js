@@ -21,7 +21,7 @@ function Layout({ children, meta }) {
     <React.Fragment>
       <Meta {...meta}></Meta>
       <nav>
-        <div className="bg-gradient-to-r from-green-400 via-blue-400 to-pink-400 h-0.5"></div>
+        <div className="bg-gradient-to-r from-green-500 via-lightBlue-400 to-pink-400 h-0.5"></div>
         <div className={navClass}>
           <div className="px-5 md:px-0 w-full md:w-1/2   h-full flex items-center justify-between">
             <Link href="/">

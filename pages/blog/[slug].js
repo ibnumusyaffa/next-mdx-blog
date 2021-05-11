@@ -46,7 +46,7 @@ export default function Post({ code, frontmatter, slug }) {
           </div>
         ) : null}
 
-        <div className="prose max-w-full">
+        <div className="prose prose-green max-w-full">
           <Component
             components={{
               code: Code,

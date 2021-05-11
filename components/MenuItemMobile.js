@@ -11,7 +11,7 @@ function MenuItem({ children, href }) {
   let classNames = clsx(
     "h-16 flex items-center justify-end px-5",
     {
-      "text-blue-500 font-semibold": isActive,
+      "text-green-500 font-semibold": isActive,
       "text-gray-700": !isActive,
     }
   );
