@@ -9,6 +9,7 @@ import Code from "../../components/Code";
 import formatDate from "../../helpers/formatDate";
 import Tag from "../../components/Tag";
 import Image from "next/image";
+
 export default function Post({ code, frontmatter, slug }) {
   const Component = React.useMemo(() => getMDXComponent(code), [code]);
   return (
@@ -73,7 +74,7 @@ async function getComponents(directory) {
   return components;
 }
 
-async function exists(path) {
+async function isFileExist(path) {
   try {
     await access(path);
     return true;
@@ -86,11 +87,10 @@ export async function getStaticProps({ params }) {
   let slug = params.slug;
 
   const POSTS_PATH = path.join(process.cwd(), "posts");
-  let isExist = await exists(path.join(POSTS_PATH, `${slug}.mdx`));
-  if (isExist) {
+  let isFile = await isFileExist(path.join(POSTS_PATH, `${slug}.mdx`));
+  if (isFile) {
     let postFilePath = path.join(POSTS_PATH, `${slug}.mdx`);
     const mdxSource = await readFile(postFilePath);
-
     const result = await bundleMDX(mdxSource, {
       files: {},
     });
