@@ -3,7 +3,7 @@ import { getMDXComponent } from "mdx-bundler/client";
 import { bundleMDX } from "mdx-bundler";
 import fs from "fs";
 import path from "path";
-const { readdir, readFile, lstat, access } = fs.promises;
+let { readdir, readFile, lstat, access } = fs.promises;
 import Layout from "../../components/Layout";
 import Code from "../../components/Code";
 import formatDate from "../../helpers/formatDate";
@@ -11,17 +11,17 @@ import Tag from "../../components/Tag";
 import Image from "next/image";
 
 export default function Post({ code, frontmatter, slug }) {
-  const Component = React.useMemo(() => getMDXComponent(code), [code]);
+  let Component = React.useMemo(() => getMDXComponent(code), [code]);
   return (
     <Layout
       meta={{
         title: frontmatter.title,
         description: frontmatter.description,
-        url: `blog/${slug}`,
+        url: `article/${slug}`,
         thumbnail: frontmatter.thumbnail,
       }}
     >
-      <article  className="mb-10">
+      <article className="mb-10">
         <header className="mb-10 mt-3 flex md:items-center flex-col">
           <h1 className="text-3xl md:text-4xl  font-semibold md:text-center">
             {frontmatter.title}
@@ -61,12 +61,12 @@ export default function Post({ code, frontmatter, slug }) {
 }
 
 async function getComponents(directory) {
-  const files = await readdir(directory);
+  let files = await readdir(directory);
   let components = {};
 
-  for (const file of files) {
+  for (let file of files) {
     if (file.substr(-3) === "tsx" || file.substr(-3) === "jsx") {
-      const fileBuffer = await readFile(path.join(directory, file));
+      let fileBuffer = await readFile(path.join(directory, file));
       components[`./${file}`] = fileBuffer.toString().trim();
     }
   }
@@ -86,15 +86,15 @@ async function isFileExist(path) {
 export async function getStaticProps({ params }) {
   let slug = params.slug;
 
-  const POSTS_PATH = path.join(process.cwd(), "posts");
+  let POSTS_PATH = path.join(process.cwd(), "content", "articles");
   let isFile = await isFileExist(path.join(POSTS_PATH, `${slug}.mdx`));
   if (isFile) {
     let postFilePath = path.join(POSTS_PATH, `${slug}.mdx`);
-    const mdxSource = await readFile(postFilePath);
-    const result = await bundleMDX(mdxSource, {
+    let mdxSource = await readFile(postFilePath);
+    let result = await bundleMDX(mdxSource, {
       files: {},
     });
-    const { code, frontmatter } = result;
+    let { code, frontmatter } = result;
 
     return {
       props: {
@@ -108,15 +108,15 @@ export async function getStaticProps({ params }) {
     };
   } else {
     let postFilePath = path.join(POSTS_PATH, `${slug}`, "index.mdx");
-    const mdxSource = await readFile(postFilePath);
+    let mdxSource = await readFile(postFilePath);
 
-    const components = await getComponents(
+    let components = await getComponents(
       path.join(POSTS_PATH, `${params.slug}`)
     );
-    const result = await bundleMDX(mdxSource, {
+    let result = await bundleMDX(mdxSource, {
       files: components,
     });
-    const { code, frontmatter } = result;
+    let { code, frontmatter } = result;
 
     return {
       props: {
@@ -132,7 +132,7 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  let POSTS_PATH = path.join(process.cwd(), "posts");
+  let POSTS_PATH = path.join(process.cwd(), "content", "articles");
   let slugs = await readdir(POSTS_PATH);
 
   let paths = [];

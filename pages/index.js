@@ -78,7 +78,7 @@ function index({ posts }) {
 }
 
 export async function getStaticProps({ params }) {
-  const POSTS_PATH = path.join(process.cwd(), "posts");
+  const POSTS_PATH = path.join(process.cwd(), "content", "articles");
   const slugs = await readdir(POSTS_PATH);
 
   let posts = [];
@@ -92,7 +92,7 @@ export async function getStaticProps({ params }) {
 
       posts.push({
         ...data,
-        slug: `/blog/${slug.replace(/\.mdx?$/, "")}`,
+        slug: `/article/${slug.replace(/\.mdx?$/, "")}`,
       });
     } else {
       const fileBuffer = await readFile(
@@ -102,7 +102,7 @@ export async function getStaticProps({ params }) {
       const { data } = matter(fileBuffer);
       posts.push({
         ...data,
-        slug: `/blog/${slug}`,
+        slug: `/article/${slug}`,
       });
     }
   }
