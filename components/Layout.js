@@ -32,7 +32,8 @@ function Layout({ children, meta }) {
             </Link>
 
             <div className="hidden md:flex h-full">
-              <MenuItem href="/tentang">Tentang</MenuItem>
+              <MenuItem href="/article">Artikel</MenuItem>
+              <MenuItem href="/tips">Pro Tips</MenuItem>
             </div>
             {show ? (
               <button className="md:hidden" onClick={toggle}>
@@ -46,9 +47,10 @@ function Layout({ children, meta }) {
           </div>
         </div>
         {show ? (
-          <div className="relative">
-            <div className="border-b flex flex-col border-gray-200 absolute w-full bg-white opacity-95">
-              <MenuItemMobile href="/tentang">Tentang</MenuItemMobile>
+          <div className="relative z-10">
+            <div className="border-b flex flex-col shadow-sm absolute w-full bg-white">
+              <MenuItemMobile href="/article">Artikel</MenuItemMobile>
+              <MenuItemMobile href="/tips">Tips</MenuItemMobile>
             </div>
           </div>
         ) : null}

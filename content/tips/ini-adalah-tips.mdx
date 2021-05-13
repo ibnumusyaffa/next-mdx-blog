@@ -1,0 +1,258 @@
+---
+id: 35db4a2a-0750-4699-a405-3996a6d99a99
+date: 2021-05-06
+category: React
+category_color: blue
+title: "Data fetching dengan React Query"
+description: "Disini kita akan belajar bagaimana react-query mempermudah mengatur asynchronous data di aplikasi react"
+thumbnail: blog/react-query.png
+show_thumbnail: false
+---
+
+Salah satu hal yang sering kita hadapi saat membangun aplikasi dengan React adalah bagaimana memutuskan pola yang cocok untuk menarik data dari _server_. Salah satu solusi yang umum dilakukan biasanya kita menarik data tersebut `useState` dan `useEffect`. contoh kodenya
+
+```javascript
+function App() {
+  let [isLoading, setLoading] = useState(false);
+  let [isError, setError] = useState(false);
+  let [profileData, setProfileData] = useState(null);
+
+  useEffect(() => {
+    let fetchProfile = async () => {
+      try {
+        setLoading(true);
+        let result = await axios(`https://rest.api/profile`);
+        setProfileData(result.data);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        setError(true);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  return <div>...</div>;
+}
+
+export default App;
+```
+
+contoh mengambil data _profile_ dengan react hooks, kode diatas bekerja dengan baik, namun ada beberapa masalah ketika aplikasi yang sedang kita kerjakan semakin membesar codebasenya
+
+- Minimal harus membuat 3 state baru lagi (_loading_, _error_, _data_) ketika akan melakukan penarikan data yang berbeda
+- Bagaimana jika ada 4 component yang berbeda secara hirarki menarik data yang sama ? tentu network request menjadi 4 kali
+- Bagaimana jika data profile yang kamu tarik beberapa waktu kemudian sudah berubah disisi server dan dianggap kadaluarsa ? bagaimana kamu mengupate data tersebut dengan mudah dan efisien?
+
+Salah satu pendekatan lain yang saya cukup popular (apalagi yang menggunakan **_Redux_**) adalah membuat fungsi penarikan data menggunakan library side effect seperti **_Redux Thunk_** atau **_Redux Saga_**, hal tersebut bisa dibilang masih terdapat kekurangan seperti poin-poin diatas tetapi juga melahirkan kode lumayan kompleks.
+
+## Berkenalan dengan React Query
+
+**_React Query_** adalah salah satu library data fetching dimana library ini juga bisa difungsikan sebagai state management, tetapi berbeda dengan state management umumnya semisal Redux, Mobx, Zustand. React Query bisa dibilang state management khusus menangani data server (server state)
+
+Beberapa fitur React Query 
+
+- Menarik data dengan mudah, state loading,error dst. sudah terbuat otomatis, dan beberapa opsi konfigurasi tambahan
+- Caching, Mengatur hasil request sebagai cache
+- Deduping, Membuat beberapa network request yang sama menjadi 1 network request
+- Tahu kapan data akan kadaluarsa dan mengupdatenya secara otomatis maupun manual
+
+## Menggunakan React Query
+
+Jika kita menggunakan React Query maka kita akan membagi state menjadi 2 kategori besar
+
+- **_Server State_**, semisal data profile, data transaksi dll. maka akan dimanage oleh React Query. jadi kita tidak perlu menyimpan data server kedalam global state management semacam Redux
+- **_Client State_** (baik global state maupun local state) semisal hide show Menu/Modal, terutama state yang tidak persistent/tidak disimpan, maka akan diatur dengan `useState` bawaan react atau library state management (Redux, Mobx, Zustand dll.)
+
+Didemo React Query ini kita akan membuat tampilan data menggunakan tabel disertai fungsi pagination dan action delete. kali ini kita akan menggunakan NextJS sebagai boilerplate awal aplikasi react kita, untuk meng generate project NextJS jalankan perintah berikut
+
+```bash
+$ npx create-next-app
+```
+
+ikuti instruksi dari installer tersebut, dan simpan projectmu di folder yang di inginkan, semisal `latihan-react-query`
+
+langkah selanjutnya yaitu menginstall React Query dan Axios untuk API clientnya
+
+```bash
+ $ npm i react-query axios
+```
+
+Kemudian untuk mengkonfigurasi React Query agar dapat bekerja di NextJs, ubah file `pages/_app.js` menjadi seperti berikut
+
+`pages/_app.js`
+```javascript
+import "../styles/globals.css";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+// Buat instance client react query
+const queryClient = new QueryClient();
+
+function MyApp({ Component, pageProps }) {
+  return (
+    //wrap aplikasi dengan provider dari react query
+    <QueryClientProvider client={queryClient}>
+      <Component {...pageProps}></Component>
+    </QueryClientProvider>
+  );
+}
+
+export default MyApp;
+```
+
+kemudian hapus isi file `pages/index.js`, dan replace dengan kodingan berikut
+
+`pages/indexjs`
+```javascript
+import axios from "axios";
+import { useQuery, useQueryClient } from "react-query";
+import { useState } from "react";
+function getUser({ page, per_page = 10 }) {
+  return axios.get("https://reqres.in/api/users", {
+    params: {
+      page: page,
+      per_page,
+    },
+  });
+}
+
+function deleteUser(id) {
+  return axios.delete(`https://reqres.in/api/users/${id}`);
+}
+
+export default function Index() {
+  let [page, setPage] = useState(1);
+  const queryClient = useQueryClient();
+
+  const { isLoading, isError, data } = useQuery(
+    [
+      "users", 
+      { page }
+    ], 
+    () => getUser({ page })
+  );
+
+  async function onDelete(id) {
+    try {
+      await deleteUser(id);
+      queryClient.invalidateQueries("users");
+      alert("berhasil dihapus");
+    } catch (error) {
+      alert("gagal dihapus");
+    }
+  }
+  return (
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>first name</th>
+            <th>last name</th>
+            <th>Email</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {data?.data.data.map((row, index) => (
+            <tr>
+              <td>{row.id}</td>
+              <td>{row.first_name}</td>
+              <td>{row.last_name}</td>
+              <td>{row.email}</td>
+              <td>
+                <button onClick={() => onDelete(row.id)}>Delete</button>
+              </td>
+            </tr>
+          ))}
+          {isLoading ? (
+            <tr>
+              <td colSpan={4}>Loading....</td>
+            </tr>
+          ) : null}
+        </tbody>
+      </table>
+      <button disabled={page == 1} onClick={() => setPage((prev) => prev - 1)}>
+        Prev
+      </button>
+      <button onClick={() => setPage((prev) => prev + 1)}>Next</button>
+    </div>
+  );
+}
+```
+
+mari kita breakdown apa yang dilakukan kode diatas
+
+#### 1. Data Fetching
+
+Dibaris 21 kita bisa melihat custom hooks `useQuery` yang kita import dari package `react-query`, hooks ini setidaknya perlu diassign minimal 2 paramater yaitu unique key, dan function yang mengembalikan `promise`. serta paramater optional ketiga, yang berfungsi sebagai config dalam melakukan fetching.
+
+```javascript
+const { isLoading, isError, data } = useQuery(
+  ["users", { page }], // paramater key, dapat berupa string, array, object
+  () => getUser({ page }), // berupa function yang mereturn promise
+  {
+     refetchOnWindowFocus: false, // data akan difetch ulang ketika fokus ke window
+  } // paramater konfigurasi
+);
+```
+
+React Query akan mengatur caching menggunakan key, sebab itu, key ini harus bersifat unique. kita dapat menggunakan key baik berupa `string`, `array`, maupun `object` selama hal tersebut **_serializable_**, kamu dapat melihat penjabaran lengkap mengenai penggunaan key ini ini [didokumentasi React Query](https://react-query.tanstack.com/guides/query-keys).
+
+hooks `useQuery` tersebut akan menjalankan network call ulang, jika salah satu keynya, terupdate, contoh state `page` berubah, maka React Query akan menjalankan ulang fungsi `getUser` nya dengan paramater `page` yang baru
+
+hook `useQuery` dia akan mengembalikan nilai semisal isLoading, IsError, isFetching, data dan lain lain, kamu bisa melihat [didocs React Query](https://react-query.tanstack.com/reference/useQuery)  nilai apa saja dikembalikan hooks tersebut.
+
+#### 2. Cache Management
+
+```javascript
+queryClient.invalidateQueries("users");
+```
+
+ketika kita menghapus sebuah user dan sukses, maka kita akan tahu bahwa data yang tampil saat ini tidak bisa dikatakan valid lagi, maka kita perlu menginvalidasi data yang tampil sekarang secara manual, dan React Query akan otomatis menarik data yang baru secara otomatis. perhatikan bahwa function `invalidateQueries` ini menggunakan keys sebagai pembeda setiap data. 
+
+```javascript
+// Invalidate semua query dicache
+ queryClient.invalidateQueries()
+ // Invalidate semua query cache yang diawali dengan key users 
+ queryClient.invalidateQueries('users')
+```
+
+kamu juga bisa melakukan pengaturan cache management menggunakan paramater config `staleTime` dan `cacheTime` 
+
+```javascript
+const { isLoading, isError, data } = useQuery(
+  "users", // paramater key, dapat berupa string, array, object
+  getUser, // berupa function yang mereturn promise
+  {
+    staleTime: 0, // waktu kadaluarsa
+    cacheTime: 1000 * 60 * 5, // waktu cache
+  }
+);
+```
+
+#### 3. Deduping
+
+Perhatikan kode ini
+
+```javascript
+import ListUser from "./users";
+
+function DoubleIndexUser() {
+  return (
+    <div>
+      <ListUser></ListUser>
+      <ListUser></ListUser>
+      <ListUser></ListUser>
+    </div>
+  );
+}
+
+export default DoubleIndexUser;
+```
+Jika kita membuat halaman list user tadi menjadi sebuat komponen, dan merender nya 3 kali, maka hal yang menarik akan terjadi, React Query akan memanggil network call yang seharusnya 3 kali menjadi 1 kali saja, hal ini dikarenakan query key yang dipakai oleh komponen tersebut sama, maka akan dijadikan 1 network call, inilah yang dinamakan deduping 
+
+
+Yap, inilah fungsi dasar React Query, kamu bisa mencari tahu fungsionalitas tambahanya [didokumentasi resminya](https://react-query.tanstack.com/overview)
