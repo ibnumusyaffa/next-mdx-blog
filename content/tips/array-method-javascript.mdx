@@ -53,6 +53,14 @@ let diatas10tahun = umur.filter((item) => {
 
 console.log(diatas10tahun);
 //true, semua element memiliki nilai >= 10
+
+let diatas30tahun = umur.filter((item) => {
+  //cari umur 25 tahun keatas
+  return item >= 30;
+});
+
+console.log(diatas30tahun);
+//false, hanya element tertentu yang memiliki nilai >= 30
 ```
 
 ## 4. Array.some()
@@ -62,12 +70,12 @@ jika **salah satu** element memenuhi kriteria yang ditentukan, `Array.some()` ak
 ```javascript
 let umur = [10, 15, 20, 25, 30, 35, 40];
 
-let diatas10tahun = umur.some((item) => {
+let diatas40tahun = umur.some((item) => {
   //cari umur 25 tahun keatas
   return item >= 40;
 });
 
-console.log(diatas10tahun);
+console.log(diatas40tahun);
 //true, ada satu element yang memiliki nilai >=40
 ```
 
@@ -109,10 +117,12 @@ console.log(pets.includes("kucing"));
 `Array.findIndex()` akan mengembalikan nomor `index` element yang pertama memenuhi kriteria yang ditentukan
 
 ```javascript
-const array1 = [5, 12, 8, 130, 44];
+const umur = [5, 12, 8, 80, 44];
 
-const isLargeNumber = (element) => element > 13;
+const index = umur.findIndex((item) => {
+  return item > 13;
+});
 
-console.log(array1.findIndex(isLargeNumber));
+console.log(index);
 // 3, index ke 3 element pertama yang mempunyai nilai > 13
 ```
