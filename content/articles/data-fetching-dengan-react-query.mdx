@@ -1,5 +1,4 @@
 ---
-id: 35db4a2a-0750-4699-a405-3996a6d99a99
 date: 2021-05-06
 category: React
 category_color: blue
@@ -51,7 +50,7 @@ Salah satu pendekatan lain yang saya cukup popular (apalagi yang menggunakan **_
 
 **_React Query_** adalah salah satu library data fetching dimana library ini juga bisa difungsikan sebagai state management, tetapi berbeda dengan state management umumnya semisal Redux, Mobx, Zustand. React Query bisa dibilang state management khusus menangani data server (server state)
 
-Beberapa fitur React Query 
+Beberapa fitur React Query
 
 - Menarik data dengan mudah, state loading,error dst. sudah terbuat otomatis, dan beberapa opsi konfigurasi tambahan
 - Caching, Mengatur hasil request sebagai cache
@@ -82,6 +81,7 @@ langkah selanjutnya yaitu menginstall React Query dan Axios untuk API clientnya
 Kemudian untuk mengkonfigurasi React Query agar dapat bekerja di NextJs, ubah file `pages/_app.js` menjadi seperti berikut
 
 `pages/_app.js`
+
 ```javascript
 import "../styles/globals.css";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -104,6 +104,7 @@ export default MyApp;
 kemudian hapus isi file `pages/index.js`, dan replace dengan kodingan berikut
 
 `pages/indexjs`
+
 ```javascript
 import axios from "axios";
 import { useQuery, useQueryClient } from "react-query";
@@ -125,12 +126,8 @@ export default function Index() {
   let [page, setPage] = useState(1);
   const queryClient = useQueryClient();
 
-  const { isLoading, isError, data } = useQuery(
-    [
-      "users", 
-      { page }
-    ], 
-    () => getUser({ page })
+  const { isLoading, isError, data } = useQuery(["users", { page }], () =>
+    getUser({ page })
   );
 
   async function onDelete(id) {
@@ -194,7 +191,7 @@ const { isLoading, isError, data } = useQuery(
   ["users", { page }], // paramater key, dapat berupa string, array, object
   () => getUser({ page }), // berupa function yang mereturn promise
   {
-     refetchOnWindowFocus: false, // data akan difetch ulang ketika fokus ke window
+    refetchOnWindowFocus: false, // data akan difetch ulang ketika fokus ke window
   } // paramater konfigurasi
 );
 ```
@@ -203,7 +200,7 @@ React Query akan mengatur caching menggunakan key, sebab itu, key ini harus bers
 
 hooks `useQuery` tersebut akan menjalankan network call ulang, jika salah satu keynya, terupdate, contoh state `page` berubah, maka React Query akan menjalankan ulang fungsi `getUser` nya dengan paramater `page` yang baru
 
-hook `useQuery` dia akan mengembalikan nilai semisal isLoading, IsError, isFetching, data dan lain lain, kamu bisa melihat [didocs React Query](https://react-query.tanstack.com/reference/useQuery)  nilai apa saja dikembalikan hooks tersebut.
+hook `useQuery` dia akan mengembalikan nilai semisal isLoading, IsError, isFetching, data dan lain lain, kamu bisa melihat [didocs React Query](https://react-query.tanstack.com/reference/useQuery) nilai apa saja dikembalikan hooks tersebut.
 
 #### 2. Cache Management
 
@@ -211,16 +208,16 @@ hook `useQuery` dia akan mengembalikan nilai semisal isLoading, IsError, isFetch
 queryClient.invalidateQueries("users");
 ```
 
-ketika kita menghapus sebuah user dan sukses, maka kita akan tahu bahwa data yang tampil saat ini tidak bisa dikatakan valid lagi, maka kita perlu menginvalidasi data yang tampil sekarang secara manual, dan React Query akan otomatis menarik data yang baru secara otomatis. perhatikan bahwa function `invalidateQueries` ini menggunakan keys sebagai pembeda setiap data. 
+ketika kita menghapus sebuah user dan sukses, maka kita akan tahu bahwa data yang tampil saat ini tidak bisa dikatakan valid lagi, maka kita perlu menginvalidasi data yang tampil sekarang secara manual, dan React Query akan otomatis menarik data yang baru secara otomatis. perhatikan bahwa function `invalidateQueries` ini menggunakan keys sebagai pembeda setiap data.
 
 ```javascript
 // Invalidate semua query dicache
- queryClient.invalidateQueries()
- // Invalidate semua query cache yang diawali dengan key users 
- queryClient.invalidateQueries('users')
+queryClient.invalidateQueries();
+// Invalidate semua query cache yang diawali dengan key users
+queryClient.invalidateQueries("users");
 ```
 
-kamu juga bisa melakukan pengaturan cache management menggunakan paramater config `staleTime` dan `cacheTime` 
+kamu juga bisa melakukan pengaturan cache management menggunakan paramater config `staleTime` dan `cacheTime`
 
 ```javascript
 const { isLoading, isError, data } = useQuery(
@@ -252,7 +249,7 @@ function DoubleIndexUser() {
 
 export default DoubleIndexUser;
 ```
-Jika kita membuat halaman list user tadi menjadi sebuat komponen, dan merender nya 3 kali, maka hal yang menarik akan terjadi, React Query akan memanggil network call yang seharusnya 3 kali menjadi 1 kali saja, hal ini dikarenakan query key yang dipakai oleh komponen tersebut sama, maka akan dijadikan 1 network call, inilah yang dinamakan deduping 
 
+Jika kita membuat halaman list user tadi menjadi sebuat komponen, dan merender nya 3 kali, maka hal yang menarik akan terjadi, React Query akan memanggil network call yang seharusnya 3 kali menjadi 1 kali saja, hal ini dikarenakan query key yang dipakai oleh komponen tersebut sama, maka akan dijadikan 1 network call, inilah yang dinamakan deduping
 
 Yap, inilah fungsi dasar React Query, kamu bisa mencari tahu fungsionalitas tambahanya [didokumentasi resminya](https://react-query.tanstack.com/overview)
