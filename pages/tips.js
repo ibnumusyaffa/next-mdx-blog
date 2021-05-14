@@ -60,8 +60,6 @@ function index({ posts }) {
                   <Tag variant={item.category_color}>{item.category}</Tag>
                 </div>
               </div>
-
-              <div className="text-sm text-gray-700">{item.description}</div>
             </a>
           </Link>
         ))}
