@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
-import fs from "fs";
 import path from "path";
-const { readdir, readFile, lstat } = fs.promises;
-import matter from "gray-matter";
 import Layout from "../components/Layout";
 import Link from "next/link";
 import Input from "../components/Input";
 import SearchIcon from "../components/icons/Search";
 import Tag from "../components/Tag";
-import formatDate from "../helpers/formatDate";
 import useDebounce from "../helpers/useDebounce";
+import { getAllPosts } from "../helpers/MDXHelper";
 function index({ posts }) {
   let [filteredPosts, setFilteredPost] = useState([]);
   let [keyword, setKeyword] = useState("");
@@ -49,7 +46,7 @@ function index({ posts }) {
         </div>
 
         {filteredPosts.map((item) => (
-          <Link key={item.id} href={item.slug}>
+          <Link key={item.id} href={`/tips/${item.slug}`}>
             <a className="group space-y-2 ">
               <div className="text-xl font-bold text-gray-900 hover:underline">
                 {item.title}
@@ -75,47 +72,12 @@ function index({ posts }) {
   );
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps() {
   const POSTS_PATH = path.join(process.cwd(), "content", "tips");
-  const slugs = await readdir(POSTS_PATH);
-
-  let posts = [];
-  for (const slug of slugs) {
-    const stat = await lstat(path.join(POSTS_PATH, slug));
-
-    if (stat.isFile()) {
-      const fileBuffer = await readFile(path.join(POSTS_PATH, slug));
-
-      const { data } = matter(fileBuffer);
-
-      posts.push({
-        ...data,
-        slug: `/tips/${slug.replace(/\.mdx?$/, "")}`,
-      });
-    } else {
-      const fileBuffer = await readFile(
-        path.join(POSTS_PATH, slug, "index.mdx")
-      );
-
-      const { data } = matter(fileBuffer);
-      posts.push({
-        ...data,
-        slug: `/tips/${slug}`,
-      });
-    }
-  }
-
-  let sorted = posts.slice().sort((a, b) => b.date - a.date);
-  let changeDate = sorted.map((item) => {
-    return {
-      ...item,
-      date: formatDate(item.date),
-    };
-  });
-
+  let posts = await getAllPosts(POSTS_PATH);
   return {
     props: {
-      posts: changeDate,
+      posts,
     },
   };
 }
