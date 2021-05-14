@@ -4,8 +4,15 @@ function index() {
   return (
     <Layout>
       <div className="flex h-64  justify-center flex-col">
-        <span className="text-3xl">Halo, Saya Ibnu Musyaffa 👋</span>
-        <div className="mt-2">Saya adalah seorang software developer, dan ini adalah blog pribadi yang berisi catatan seputar pengembangan perangkat lunak</div>
+        <div>
+          <span className="text-2xl md:text-3xl pb-2 font-semibold text-gray-800">
+            Halo, Saya Ibnu Musyaffa 👋
+          </span>
+          <div className="mt-3 text-gray-700">
+            Saya adalah seorang software developer, dan ini adalah blog pribadi
+            yang berisi tulisan seputar pengembangan perangkat lunak
+          </div>
+        </div>
       </div>
     </Layout>
   );
