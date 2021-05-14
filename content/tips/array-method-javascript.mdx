@@ -44,23 +44,14 @@ console.log(umurBaru);
 `Array.every()` akan mengembalikan nilai `true` jika **semua element** array memenuhi kriteria yang ditentukan.
 
 ```javascript
-let umur = [10, 15, 20, 25, 30, 35, 40];
+let angka = [10, 15, 20, 25, 30, 35, 40];
 
-let diatas10tahun = umur.filter((item) => {
-  //cari umur 25 tahun keatas
-  return item >= 10;
+let isAllPositive = angka.filter((item) => {
+  return item > 0;
 });
 
-console.log(diatas10tahun);
-//true, semua element memiliki nilai >= 10
-
-let diatas30tahun = umur.filter((item) => {
-  //cari umur 25 tahun keatas
-  return item >= 30;
-});
-
-console.log(diatas30tahun);
-//false, hanya element tertentu yang memiliki nilai >= 30
+console.log(isAllPositive);
+//true, semua element adalah angka positif
 ```
 
 ## 4. Array.some()
@@ -68,15 +59,15 @@ console.log(diatas30tahun);
 jika **salah satu** element memenuhi kriteria yang ditentukan, `Array.some()` akan mengembalikan nilai `true`, berbeda dengan `Array.every()` dimana semua element harus memenuhi kriteria yang ada.
 
 ```javascript
-let umur = [10, 15, 20, 25, 30, 35, 40];
+let umur = [10, 15, 20, 25, 30, 35, -40];
 
-let diatas40tahun = umur.some((item) => {
+let hasNegative = umur.some((item) => {
   //cari umur 25 tahun keatas
-  return item >= 40;
+  return item < 0;
 });
 
-console.log(diatas40tahun);
-//true, ada satu element yang memiliki nilai >=40
+console.log(hasNegative);
+//true, ada satu element yang memiliki nilai negatif
 ```
 
 ## 5. Array.find()
@@ -84,16 +75,16 @@ console.log(diatas40tahun);
 `Array.find()` akan mengembalikan satu element pada array, yang pertama kali memenuhi kriteria yang ditentukan, jika tidak ada yang memenuhi kriteria, maka akan mengembalikan nilai `undefined`
 
 ```javascript
-let umur = [10, 15, 20, 25, 30, 35, 40];
+let angka = [10, 15, 20, 25, 30, 35, 40];
 
-let cari = umur.find((item) => {
+let cari = angka.find((item) => {
   return item >= 23;
 });
 
 console.log(cari);
 // 25
 
-let cariLagi = umur.find((item) => {
+let cariLagi = angka.find((item) => {
   return item >= 50;
 });
 
@@ -117,9 +108,9 @@ console.log(pets.includes("kucing"));
 `Array.findIndex()` akan mengembalikan nomor `index` element yang pertama memenuhi kriteria yang ditentukan
 
 ```javascript
-const umur = [5, 12, 8, 80, 44];
+const angka = [5, 12, 8, 80, 44];
 
-const index = umur.findIndex((item) => {
+const index = angka.findIndex((item) => {
   return item > 13;
 });
 
