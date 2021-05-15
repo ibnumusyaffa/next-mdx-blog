@@ -1,15 +1,16 @@
 import fs from "fs";
-const { readdir, readFile, lstat,access } = fs.promises;
 import matter from "gray-matter";
 import path from "path";
 import formatDate from "./formatDate";
 import { bundleMDX } from "mdx-bundler";
+let { readdir, readFile, lstat, access } = fs.promises;
+
 export async function getAllPosts(posts_path) {
-  const slugs = await readdir(posts_path);
+  let slugs = await readdir(posts_path);
 
   let posts = await Promise.all(
     slugs.map(async (slug) => {
-      const stat = await lstat(path.join(posts_path, slug));
+      let stat = await lstat(path.join(posts_path, slug));
 
       let fileBuffer = null;
       if (stat.isFile()) {
@@ -18,7 +19,7 @@ export async function getAllPosts(posts_path) {
         fileBuffer = await readFile(path.join(posts_path, slug, "index.mdx"));
       }
 
-      const { data } = matter(fileBuffer);
+      let { data } = matter(fileBuffer);
       return {
         ...data,
         slug: `${slug.replace(/\.mdx?$/, "")}`,
@@ -28,6 +29,7 @@ export async function getAllPosts(posts_path) {
 
   return posts
     .slice()
+    .filter((item) => item.is_published == false)
     .sort((a, b) => b.date - a.date)
     .map((item) => {
       return {
@@ -53,18 +55,17 @@ export async function getAllPaths(post_path) {
 
 export async function getPostDetail(post_path, slug) {
   let postFilePath;
-  let components = {};
+
   let isFile = await isFileExist(path.join(post_path, `${slug}.mdx`));
   if (isFile) {
     postFilePath = path.join(post_path, `${slug}.mdx`);
   } else {
-    postFilePath = path.join(post_path, `${slug}`, "index.mdx");
-    components = await getComponents(path.join(post_path, `${slug}`));
+    postFilePath = path.join(post_path, slug, "index.mdx");
   }
 
   let mdxSource = await readFile(postFilePath);
   let result = await bundleMDX(mdxSource, {
-    files: components,
+    cwd: isFile ? undefined : path.join(post_path, slug),
   });
   let { code, frontmatter } = result;
 
@@ -78,25 +79,11 @@ export async function getPostDetail(post_path, slug) {
   };
 }
 
-async function getComponents(directory) {
-  let files = await readdir(directory);
-  let components = {};
-
-  for (let file of files) {
-    if (file.substr(-3) === "tsx" || file.substr(-3) === "jsx") {
-      let fileBuffer = await readFile(path.join(directory, file));
-      components[`./${file}`] = fileBuffer.toString().trim();
-    }
-  }
-
-  return components;
-}
-
 async function isFileExist(path) {
   try {
     await access(path);
     return true;
-  } catch {
+  } catch (e) {
     return false;
   }
 }
