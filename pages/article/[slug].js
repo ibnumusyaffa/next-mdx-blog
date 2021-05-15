@@ -53,7 +53,7 @@ export default function Post({ code, frontmatter, slug, readingTime, toc }) {
         ) : null}
 
         {frontmatter.show_toc ? (
-          <div className="flex  flex-col justify-center  bg-coolGray-100 px-2 py-4  text-gray-800 rounded">
+          <div className="flex  flex-col justify-center  bg-gray-50 border border-gray-200 px-2 py-3  text-gray-700 rounded">
             <button
               onClick={() => setCollapseToc((prev) => !prev)}
               className="font-semibold uppercase focus:outline-none"

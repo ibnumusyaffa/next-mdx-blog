@@ -65,7 +65,7 @@ function Layout({ children, meta }) {
         <main className="px-5 md:px-0 w-full md:w-1/2">{children}</main>
       </div>
       <footer className="flex justify-center">
-        <div className="px-5 md:px-0 w-full md:w-1/2 text-gray-600 text-sm border-t border-gray-200 py-5 text-center">
+        <div className="px-5 md:px-0 w-full md:w-1/2 text-gray-600 text-sm border-t border-gray-300 py-5 text-center">
           © 2021. Ibnu Musyaffa
         </div>
       </footer>
