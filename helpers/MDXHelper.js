@@ -5,7 +5,9 @@ import formatDate from "./formatDate";
 import { bundleMDX } from "mdx-bundler";
 import readingTime from "reading-time";
 let { readdir, readFile, lstat, access } = fs.promises;
-
+import remarkSlug from "remark-slug";
+var GithubSlugger = require("github-slugger");
+var slugger = new GithubSlugger();
 export async function getAllPosts(posts_path) {
   let slugs = await readdir(posts_path);
 
@@ -71,15 +73,37 @@ export async function getPostDetail(post_path, slug) {
 
   let result = await bundleMDX(mdxSource, {
     cwd: isFile ? undefined : path.join(post_path, slug),
-  });
-  let { code, frontmatter } = result;
+    xdmOptions(options) {
+      // this is the recommended way to add custom remark/rehype plugins:
+      // The syntax might look weird, but it protects you in case we add/remove
+      // plugins in the future.
+      options.remarkPlugins = [...(options.remarkPlugins ?? []), remarkSlug];
+      options.rehypePlugins = [...(options.rehypePlugins ?? [])];
 
-  // let { content } = matter(mdxSource);
-  let readStat = readingTime(matter(mdxSource).content);
+      return options;
+    },
+  });
+
+  let { content: mdxContent } = matter(mdxSource);
+  let readStat = readingTime(mdxContent);
+  const toc = mdxContent
+    .split("\n")
+    .filter((line) => line.match(/^#{1,3}\s/)) // only match level 1-3
+    .map((line) => {
+      const [level, title] = line.split(/(?<=#)\s/); // split on first space
+      return {
+        level: level.length,
+        title,
+        href: "#" + slugger.slug(title),
+      };
+    });
+
+  let { code, frontmatter } = result;
 
   return {
     slug,
     code,
+    toc,
     readingTime: readStat.text,
     frontmatter: {
       ...frontmatter,

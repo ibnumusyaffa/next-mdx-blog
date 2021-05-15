@@ -6,9 +6,14 @@ import Code from "../../components/Code";
 import Tag from "../../components/Tag";
 import Image from "next/image";
 import { getAllPaths, getPostDetail } from "../../helpers/MDXHelper";
+import clsx from "clsx";
+import { useState } from "react";
+import ArrowRight from "../../components/icons/ArrowRight";
+import ArrowDown from "../../components/icons/ArrowDown";
 
-export default function Post({ code, frontmatter, slug, readingTime }) {
+export default function Post({ code, frontmatter, slug, readingTime, toc }) {
   let Component = React.useMemo(() => getMDXComponent(code), [code]);
+  let [collapseToc, setCollapseToc] = useState(false);
   return (
     <Layout
       meta={{
@@ -47,7 +52,41 @@ export default function Post({ code, frontmatter, slug, readingTime }) {
           </div>
         ) : null}
 
-        <div className="prose prose-green max-w-full">
+        {frontmatter.show_toc ? (
+          <div className="flex  flex-col justify-center  bg-coolGray-100 px-2 py-4  text-gray-800 rounded">
+            <button
+              onClick={() => setCollapseToc((prev) => !prev)}
+              className="font-semibold uppercase focus:outline-none"
+            >
+              <div className="flex items-center">
+                {collapseToc ? (
+                  <ArrowDown></ArrowDown>
+                ) : (
+                  <ArrowRight></ArrowRight>
+                )}
+
+                <div className="pl-1">Daftar Isi</div>
+              </div>
+            </button>
+            {collapseToc ? (
+              <div className="mt-2 space-y-1 pl-6">
+                {toc.map((item) => {
+                  let aClass = clsx("block", {
+                    "pl-0": item.level == 2,
+                    "pl-5": item.level == 3,
+                  });
+                  return (
+                    <a className={aClass} href={item.href}>
+                      {item.title}
+                    </a>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+
+        <div className="prose prose-green max-w-full mt-5">
           <Component
             components={{
               code: Code,

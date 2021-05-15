@@ -6,6 +6,7 @@ title: "Data fetching dengan React Query"
 description: "Disini kita akan belajar bagaimana react-query mempermudah mengatur asynchronous data di aplikasi react"
 thumbnail: blog/react-query.png
 show_thumbnail: false
+show_toc: true
 is_published: true
 ---
 
@@ -183,7 +184,7 @@ export default function Index() {
 
 mari kita breakdown apa yang dilakukan kode diatas
 
-#### 1. Data Fetching
+### 1. Data Fetching
 
 Dibaris 21 kita bisa melihat custom hooks `useQuery` yang kita import dari package `react-query`, hooks ini setidaknya perlu diassign minimal 2 paramater yaitu unique key, dan function yang mengembalikan `promise`. serta paramater optional ketiga, yang berfungsi sebagai config dalam melakukan fetching.
 
@@ -203,7 +204,7 @@ hooks `useQuery` tersebut akan menjalankan network call ulang, jika salah satu k
 
 hook `useQuery` dia akan mengembalikan nilai semisal isLoading, IsError, isFetching, data dan lain lain, kamu bisa melihat [didocs React Query](https://react-query.tanstack.com/reference/useQuery) nilai apa saja dikembalikan hooks tersebut.
 
-#### 2. Cache Management
+### 2. Cache Management
 
 ```javascript
 queryClient.invalidateQueries("users");
@@ -231,7 +232,7 @@ const { isLoading, isError, data } = useQuery(
 );
 ```
 
-#### 3. Deduping
+### 3. Deduping
 
 Perhatikan kode ini
 
