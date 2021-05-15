@@ -29,7 +29,7 @@ export async function getAllPosts(posts_path) {
 
   return posts
     .slice()
-    .filter((item) => item.is_published == false)
+    .filter((item) => item.is_published == true)
     .sort((a, b) => b.date - a.date)
     .map((item) => {
       return {
