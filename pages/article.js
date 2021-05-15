@@ -53,6 +53,9 @@ function index({ posts }) {
               </div>
               <div className="flex items-center space-x-3">
                 <div className="text-sm text-gray-700">{item.date}</div>
+                <div className="text-gray-700">·</div>
+                <div className="text-sm text-gray-700">{item.readingTime}</div>
+                <div className="text-gray-700">·</div>
                 <div>
                   <Tag variant={item.category_color}>{item.category}</Tag>
                 </div>

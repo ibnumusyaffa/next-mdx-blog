@@ -7,7 +7,7 @@ import Tag from "../../components/Tag";
 import Image from "next/image";
 import { getAllPaths, getPostDetail } from "../../helpers/MDXHelper";
 
-export default function Post({ code, frontmatter, slug }) {
+export default function Post({ code, frontmatter, slug, readingTime }) {
   let Component = React.useMemo(() => getMDXComponent(code), [code]);
   return (
     <Layout
@@ -25,6 +25,9 @@ export default function Post({ code, frontmatter, slug }) {
           </h1>
           <div className="flex space-x-3 mt-5">
             <div className="text-sm text-gray-700">{frontmatter.date}</div>
+            <div className="text-gray-700">·</div>
+            <div className="text-sm text-gray-700">{readingTime}</div>
+            <div className="text-gray-700">·</div>
             <div>
               <Tag variant={frontmatter.category_color}>
                 {frontmatter.category}
@@ -61,7 +64,7 @@ export async function getStaticProps({ params }) {
   let slug = params.slug;
   let POSTS_PATH = path.join(process.cwd(), "content", "tips");
   let post = await getPostDetail(POSTS_PATH, slug);
-  
+
   return {
     props: post,
   };

@@ -3,6 +3,7 @@ import matter from "gray-matter";
 import path from "path";
 import formatDate from "./formatDate";
 import { bundleMDX } from "mdx-bundler";
+import readingTime from "reading-time";
 let { readdir, readFile, lstat, access } = fs.promises;
 
 export async function getAllPosts(posts_path) {
@@ -19,10 +20,13 @@ export async function getAllPosts(posts_path) {
         fileBuffer = await readFile(path.join(posts_path, slug, "index.mdx"));
       }
 
-      let { data } = matter(fileBuffer);
+      let { data, content } = matter(fileBuffer);
+
+      let readStat = readingTime(content);
       return {
         ...data,
         slug: `${slug.replace(/\.mdx?$/, "")}`,
+        readingTime: readStat.text,
       };
     })
   );
@@ -64,14 +68,19 @@ export async function getPostDetail(post_path, slug) {
   }
 
   let mdxSource = await readFile(postFilePath);
+
   let result = await bundleMDX(mdxSource, {
     cwd: isFile ? undefined : path.join(post_path, slug),
   });
   let { code, frontmatter } = result;
 
+  // let { content } = matter(mdxSource);
+  let readStat = readingTime(matter(mdxSource).content);
+
   return {
     slug,
     code,
+    readingTime: readStat.text,
     frontmatter: {
       ...frontmatter,
       date: formatDate(frontmatter.date),
