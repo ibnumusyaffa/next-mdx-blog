@@ -71,7 +71,7 @@ export default function Post({ code, frontmatter, slug, readingTime, toc }) {
             {collapseToc ? (
               <div className="mt-2 space-y-1 pl-6">
                 {toc.map((item) => {
-                  let aClass = clsx("block", {
+                  let aClass = clsx("block hover:underline", {
                     "pl-0": item.level == 2,
                     "pl-5": item.level == 3,
                   });
