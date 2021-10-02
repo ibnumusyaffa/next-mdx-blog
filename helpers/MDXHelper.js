@@ -8,6 +8,37 @@ let { readdir, readFile, lstat, access } = fs.promises;
 import remarkSlug from "remark-slug";
 var GithubSlugger = require("github-slugger");
 var slugger = new GithubSlugger();
+
+const getRehypeMdxCodeMeta = async () => {
+  const { visit } = await import("unist-util-visit");
+
+  return (options = {}) => {
+    return (tree) => {
+      visit(tree, "element", visitor);
+    };
+
+    function visitor(node, index, parentNode) {
+      if (node.tagName === "code" && node.data && node.data.meta) {
+        const blocks = node.data.meta.split(" ");
+
+        node.properties = blocks.reduce((props, block) => {
+          const [prop, value] = block.split("=");
+
+          if (typeof value === "undefined") {
+            props.line = prop;
+
+            return props;
+          }
+
+          props[prop] = value;
+
+          return props;
+        }, node.properties);
+      }
+    }
+  };
+};
+
 export async function getAllPosts(posts_path) {
   let slugs = await readdir(posts_path);
 
@@ -70,7 +101,7 @@ export async function getPostDetail(post_path, slug) {
   }
 
   let mdxSource = await readFile(postFilePath);
-
+  const rehypeMdxCodeMeta = await getRehypeMdxCodeMeta();
   let result = await bundleMDX(mdxSource, {
     cwd: isFile ? undefined : path.join(post_path, slug),
     xdmOptions(options) {
@@ -78,7 +109,10 @@ export async function getPostDetail(post_path, slug) {
       // The syntax might look weird, but it protects you in case we add/remove
       // plugins in the future.
       options.remarkPlugins = [...(options.remarkPlugins ?? []), remarkSlug];
-      options.rehypePlugins = [...(options.rehypePlugins ?? [])];
+      options.rehypePlugins = [
+        ...(options.rehypePlugins ?? []),
+        rehypeMdxCodeMeta,
+      ];
 
       return options;
     },
