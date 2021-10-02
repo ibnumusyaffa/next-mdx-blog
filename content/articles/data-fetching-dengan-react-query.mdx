@@ -12,7 +12,7 @@ is_published: true
 
 Salah satu hal yang sering kita hadapi saat membangun aplikasi dengan React adalah bagaimana memutuskan pola yang cocok untuk menarik data dari _server_. Salah satu solusi yang umum dilakukan biasanya kita menarik data tersebut `useState` dan `useEffect`. contoh kodenya
 
-```javascript
+```jsx
 function App() {
   let [isLoading, setLoading] = useState(false);
   let [isError, setError] = useState(false);
@@ -84,7 +84,7 @@ Kemudian untuk mengkonfigurasi React Query agar dapat bekerja di NextJs, ubah fi
 
 `pages/_app.js`
 
-```javascript
+```jsx
 import "../styles/globals.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 
@@ -107,7 +107,7 @@ kemudian hapus isi file `pages/index.js`, dan replace dengan kodingan berikut
 
 `pages/indexjs`
 
-```javascript
+```jsx
 import axios from "axios";
 import { useQuery, useQueryClient } from "react-query";
 import { useState } from "react";
@@ -188,7 +188,7 @@ mari kita breakdown apa yang dilakukan kode diatas
 
 Dibaris 21 kita bisa melihat custom hooks `useQuery` yang kita import dari package `react-query`, hooks ini setidaknya perlu diassign minimal 2 paramater yaitu unique key, dan function yang mengembalikan `promise`. serta paramater optional ketiga, yang berfungsi sebagai config dalam melakukan fetching.
 
-```javascript
+```jsx
 const { isLoading, isError, data } = useQuery(
   ["users", { page }], // paramater key, dapat berupa string, array, object
   () => getUser({ page }), // berupa function yang mereturn promise
@@ -206,13 +206,13 @@ hook `useQuery` dia akan mengembalikan nilai semisal isLoading, IsError, isFetch
 
 ### 2. Cache Management
 
-```javascript
+```jsx
 queryClient.invalidateQueries("users");
 ```
 
 ketika kita menghapus sebuah user dan sukses, maka kita akan tahu bahwa data yang tampil saat ini tidak bisa dikatakan valid lagi, maka kita perlu menginvalidasi data yang tampil sekarang secara manual, dan React Query akan otomatis menarik data yang baru secara otomatis. perhatikan bahwa function `invalidateQueries` ini menggunakan keys sebagai pembeda setiap data.
 
-```javascript
+```jsx
 // Invalidate semua query dicache
 queryClient.invalidateQueries();
 // Invalidate semua query cache yang diawali dengan key users
@@ -221,7 +221,7 @@ queryClient.invalidateQueries("users");
 
 kamu juga bisa melakukan pengaturan cache management menggunakan paramater config `staleTime` dan `cacheTime`
 
-```javascript
+```jsx
 const { isLoading, isError, data } = useQuery(
   "users", // paramater key, dapat berupa string, array, object
   getUser, // berupa function yang mereturn promise
@@ -236,7 +236,7 @@ const { isLoading, isError, data } = useQuery(
 
 Perhatikan kode ini
 
-```javascript
+```jsx
 import ListUser from "./users";
 
 function DoubleIndexUser() {
