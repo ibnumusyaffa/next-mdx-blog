@@ -100,11 +100,13 @@ export async function getPostDetail(post_path, slug) {
     postFilePath = path.join(post_path, slug, "index.mdx");
   }
 
-  let mdxSource = await readFile(postFilePath);
+  let mdxSource = await readFile(postFilePath, "utf8");
+
   const rehypeMdxCodeMeta = await getRehypeMdxCodeMeta();
-  let result = await bundleMDX(mdxSource, {
+  let result = await bundleMDX({
+    source: mdxSource,
     cwd: isFile ? undefined : path.join(post_path, slug),
-    xdmOptions(options) {
+    mdxOptions(options) {
       // this is the recommended way to add custom remark/rehype plugins:
       // The syntax might look weird, but it protects you in case we add/remove
       // plugins in the future.
