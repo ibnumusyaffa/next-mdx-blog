@@ -2,7 +2,7 @@ import * as React from "react";
 import { getMDXComponent } from "mdx-bundler/client";
 import path from "path";
 import Layout from "../../components/Layout";
-import Code from "../../components/Code";
+import Pre from "../../components/Pre";
 import Tag from "../../components/Tag";
 import Image from "next/image";
 import { getAllPaths, getPostDetail } from "../../helpers/MDXHelper";
@@ -89,8 +89,7 @@ export default function Post({ code, frontmatter, slug, readingTime, toc }) {
         <div className="prose prose-green max-w-full mt-5">
           <Component
             components={{
-              code: Code,
-              pre: ({ children, ...other }) => children,
+              pre: Pre
             }}
           />
         </div>

@@ -8,15 +8,23 @@
 body {
   font-family: "Lato", sans-serif;
 }
-.prism-code {
+pre {
   font-family: "Fira Code", monospace;
+  background-color: #272822 !important;
 }
 
-
-.highlight-line {
-  background-color: rgb(53, 59, 69);
-  width: 100%;
+code[data-line-numbers] {
+  counter-reset: line;
 }
-
-
-
+ 
+code[data-line-numbers] > .line::before {
+  counter-increment: line;
+  content: counter(line);
+ 
+  /* Other styling */
+  display: inline-block;
+  width: 1rem;
+  margin-right: 2rem;
+  text-align: right;
+  color: gray;
+}

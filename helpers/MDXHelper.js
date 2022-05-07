@@ -6,38 +6,34 @@ import { bundleMDX } from "mdx-bundler";
 import readingTime from "reading-time";
 let { readdir, readFile, lstat, access } = fs.promises;
 import remarkSlug from "remark-slug";
-var GithubSlugger = require("github-slugger");
-var slugger = new GithubSlugger();
+import GithubSlugger from "github-slugger";
+const slugger = new GithubSlugger();
+import rehypePrettyCode from "rehype-pretty-code";
 
-const getRehypeMdxCodeMeta = async () => {
-  const { visit } = await import("unist-util-visit");
+function rehypePrettyCodeWithConf() {
+  const options = {
+    // Use one of Shiki's packaged themes
+    theme: "monokai",
+    // Or your own JSON theme
 
-  return (options = {}) => {
-    return (tree) => {
-      visit(tree, "element", visitor);
-    };
-
-    function visitor(node, index, parentNode) {
-      if (node.tagName === "code" && node.data && node.data.meta) {
-        const blocks = node.data.meta.split(" ");
-
-        node.properties = blocks.reduce((props, block) => {
-          const [prop, value] = block.split("=");
-
-          if (typeof value === "undefined") {
-            props.line = prop;
-
-            return props;
-          }
-
-          props[prop] = value;
-
-          return props;
-        }, node.properties);
+    onVisitLine(node) {
+      // Prevent lines from collapsing in `display: grid` mode, and
+      // allow empty lines to be copy/pasted
+      if (node.children.length === 0) {
+        node.children = [{ type: "text", value: " " }];
       }
-    }
+    },
+    // Feel free to add classNames that suit your docs
+    onVisitHighlightedLine(node) {
+      node.properties.className.push("highlighted");
+    },
+    onVisitHighlightedWord(node) {
+      node.properties.className = ["word"];
+    },
   };
-};
+
+  return rehypePrettyCode(options);
+}
 
 export async function getAllPosts(posts_path) {
   let slugs = await readdir(posts_path);
@@ -102,18 +98,14 @@ export async function getPostDetail(post_path, slug) {
 
   let mdxSource = await readFile(postFilePath, "utf8");
 
-  const rehypeMdxCodeMeta = await getRehypeMdxCodeMeta();
   let result = await bundleMDX({
     source: mdxSource,
     cwd: isFile ? undefined : path.join(post_path, slug),
     mdxOptions(options) {
-      // this is the recommended way to add custom remark/rehype plugins:
-      // The syntax might look weird, but it protects you in case we add/remove
-      // plugins in the future.
       options.remarkPlugins = [...(options.remarkPlugins ?? []), remarkSlug];
       options.rehypePlugins = [
         ...(options.rehypePlugins ?? []),
-        rehypeMdxCodeMeta,
+        rehypePrettyCodeWithConf,
       ];
 
       return options;
