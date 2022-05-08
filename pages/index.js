@@ -26,7 +26,7 @@ function Index({ posts }) {
                 </div>
               </div>
 
-              <div className="text-sm text-gray-700">{item.description}</div>
+              <div className="text-gray-700">{item.description}</div>
             </a>
           </Link>
         ))}

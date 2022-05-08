@@ -10,6 +10,7 @@
   "dependencies": {
     "@fontsource/jetbrains-mono": "^4.5.8",
     "@fontsource/roboto": "^4.5.5",
+    "@giscus/react": "^2.0.3",
     "clsx": "^1.1.1",
     "date-fns": "^2.21.1",
     "esbuild": "^0.14.36",

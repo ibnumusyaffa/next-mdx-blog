@@ -10,6 +10,7 @@ import clsx from "clsx";
 import { useState } from "react";
 import ArrowRight from "../../components/icons/ArrowRight";
 import ArrowDown from "../../components/icons/ArrowDown";
+import Giscus from "@giscus/react";
 
 export default function Post({ code, frontmatter, slug, readingTime, toc }) {
   let Component = React.useMemo(() => getMDXComponent(code), [code]);
@@ -94,6 +95,21 @@ export default function Post({ code, frontmatter, slug, readingTime, toc }) {
           />
         </div>
       </article>
+      <Giscus
+        repo="ibnumusyaffa/ibnu.dev"
+        repoId="MDEwOlJlcG9zaXRvcnkzNjMwMjEwNzk="
+        category="General"
+        categoryId="DIC_kwDOFaNDF84CO_nG"
+        mapping="pathname"
+        reactionsEnabled="1"
+        emitMetadata="0"
+        inputPosition="top"
+        theme="light"
+        lang="en"
+        loading="lazy"
+        crossorigin="anonymous"
+        async
+      ></Giscus>
     </Layout>
   );
 }

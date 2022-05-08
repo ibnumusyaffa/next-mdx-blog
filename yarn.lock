@@ -55,6 +55,18 @@
   "resolved" "https://registry.npmjs.org/@fontsource/roboto/-/roboto-4.5.5.tgz"
   "version" "4.5.5"
 
+"@giscus/react@^2.0.3":
+  "integrity" "sha512-ynywOgvvlPn7zmWXDWAPr3jqfYC43vwK1g5P8qr528GjyWKXVyxBLJIve/mBrl+aCpZurcaExtsoJ2z6gq+Xgg=="
+  "resolved" "https://registry.npmjs.org/@giscus/react/-/react-2.0.3.tgz"
+  "version" "2.0.3"
+  dependencies:
+    "giscus" "^1.0.3"
+
+"@lit/reactive-element@^1.3.0":
+  "integrity" "sha512-A2e18XzPMrIh35nhIdE4uoqRzoIpEU5vZYuQN4S3Ee1zkGdYC27DP12pewbw/RLgPHzaE4kx/YqxMzebOpm0dA=="
+  "resolved" "https://registry.npmjs.org/@lit/reactive-element/-/reactive-element-1.3.2.tgz"
+  "version" "1.3.2"
+
 "@mdx-js/esbuild@^2.0.0":
   "integrity" "sha512-iwcbh7eZZh55r1/lqyrPpkIsuczmlUclulfrtc983mJncdhhhqv0g01loK2r3L0LeIzORhb8h1xUsAWneG0c6w=="
   "resolved" "https://registry.npmjs.org/@mdx-js/esbuild/-/esbuild-2.1.1.tgz"
@@ -202,6 +214,11 @@
   "integrity" "sha512-Ku5+GPFa12S3W26Uwtw+xyrtIpaZsGYHH6zxNbZlstmlvMYSZRzOwzwsXbxlVUbHyUucctSyuFtu6bNxwYomIw=="
   "resolved" "https://registry.npmjs.org/@types/resolve/-/resolve-1.20.1.tgz"
   "version" "1.20.1"
+
+"@types/trusted-types@^2.0.2":
+  "integrity" "sha512-F5DIZ36YVLE+PN+Zwws4kJogq47hNgX3Nx6WyDJ3kcplxyke3XIzB8uK5n/Lpm1HBsbGzd6nmGehL8cPekP+Tg=="
+  "resolved" "https://registry.npmjs.org/@types/trusted-types/-/trusted-types-2.0.2.tgz"
+  "version" "2.0.2"
 
 "@types/unist@*", "@types/unist@^2.0.0":
   "integrity" "sha512-FvUupuM3rlRsRtCN+fDudtmytGO6iHJuuRKS1Ss0pG5z8oX0diNEw94UEL7hgDbpN94rgaK5R7sWm6RrSkZuAQ=="
@@ -694,6 +711,13 @@
   "resolved" "https://registry.npmjs.org/function-bind/-/function-bind-1.1.1.tgz"
   "version" "1.1.1"
 
+"giscus@^1.0.3":
+  "integrity" "sha512-SaytuVitbLN3f8VaVeClhRvZ8XEIvjy5H4sHfaQne0yb5oKy990F12cNQtgGcTjgC8NZcJdv2bDunqQGY6sr8g=="
+  "resolved" "https://registry.npmjs.org/giscus/-/giscus-1.0.3.tgz"
+  "version" "1.0.3"
+  dependencies:
+    "lit" "^2.2.2"
+
 "github-slugger@^1.0.0", "github-slugger@^1.3.0":
   "integrity" "sha512-gwJScWVNhFYSRDvURk/8yhcFBee6aFjye2a7Lhb2bUyRulpIoek9p0I9Kt7PT67d/nUlZbFu8L9RLiA0woQN8Q=="
   "resolved" "https://registry.npmjs.org/github-slugger/-/github-slugger-1.3.0.tgz"
@@ -929,6 +953,30 @@
   "integrity" "sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg=="
   "resolved" "https://registry.npmjs.org/lines-and-columns/-/lines-and-columns-1.2.4.tgz"
   "version" "1.2.4"
+
+"lit-element@^3.2.0":
+  "integrity" "sha512-HbE7yt2SnUtg5DCrWt028oaU4D5F4k/1cntAFHTkzY8ZIa8N0Wmu92PxSxucsQSOXlODFrICkQ5x/tEshKi13g=="
+  "resolved" "https://registry.npmjs.org/lit-element/-/lit-element-3.2.0.tgz"
+  "version" "3.2.0"
+  dependencies:
+    "@lit/reactive-element" "^1.3.0"
+    "lit-html" "^2.2.0"
+
+"lit-html@^2.2.0":
+  "integrity" "sha512-vI4j3eWwtQaR8q/O63juZVliBIFMio716X719/lSsGH4UWPy2/7Qf377jsNs4cx3gCHgIbx8yxFgXFQ/igZyXQ=="
+  "resolved" "https://registry.npmjs.org/lit-html/-/lit-html-2.2.3.tgz"
+  "version" "2.2.3"
+  dependencies:
+    "@types/trusted-types" "^2.0.2"
+
+"lit@^2.2.2":
+  "integrity" "sha512-5/v+r9dH3Pw/o0rhp/qYk3ERvOUclNF31bWb0FiW6MPgwdQIr+/KCt/p3zcd8aPl8lIGnxdGrVcZA+gWS6oFOQ=="
+  "resolved" "https://registry.npmjs.org/lit/-/lit-2.2.3.tgz"
+  "version" "2.2.3"
+  dependencies:
+    "@lit/reactive-element" "^1.3.0"
+    "lit-element" "^3.2.0"
+    "lit-html" "^2.2.0"
 
 "lodash.castarray@^4.4.0":
   "integrity" "sha1-wCUTUV4wna3dTCTGDP3c9ZdtkRU="
@@ -1763,7 +1811,7 @@
   "resolved" "https://registry.npmjs.org/quick-lru/-/quick-lru-5.1.1.tgz"
   "version" "5.1.1"
 
-"react-dom@^17.0.2 || ^18.0.0-0", "react-dom@^18.0.0":
+"react-dom@^16 || ^17 || ^18", "react-dom@^17.0.2 || ^18.0.0-0", "react-dom@^18.0.0":
   "integrity" "sha512-XqX7uzmFo0pUceWFCt7Gff6IyIMzFUn7QMZrbrQfGxtaxXZIcGQzoNpRLE3fQLnS4XzLLPMZX2T9TRcSrasicw=="
   "resolved" "https://registry.npmjs.org/react-dom/-/react-dom-18.0.0.tgz"
   "version" "18.0.0"
@@ -1771,7 +1819,7 @@
     "loose-envify" "^1.1.0"
     "scheduler" "^0.21.0"
 
-"react@^17.0.2 || ^18.0.0-0", "react@^18.0.0", "react@>= 16.8.0 || 17.x.x || ^18.0.0-0":
+"react@^16 || ^17 || ^18", "react@^17.0.2 || ^18.0.0-0", "react@^18.0.0", "react@>= 16.8.0 || 17.x.x || ^18.0.0-0":
   "integrity" "sha512-x+VL6wbT4JRVPm7EGxXhZ8w8LTROaxPXOqhlGyVSrv0sB1jkyFGgXxJ8LVoPRLvPR6/CIZGFmfzqUa2NYeMr2A=="
   "resolved" "https://registry.npmjs.org/react/-/react-18.0.0.tgz"
   "version" "18.0.0"
