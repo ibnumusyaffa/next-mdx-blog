@@ -7,6 +7,15 @@
 pre {
   font-family: "Jetbrains Mono", monospace;
   background-color: #272822 !important;
+  border-radius: unset  !important;
+  @apply -mr-5 -ml-5
+}
+
+
+@media (min-width: 768px) {
+  pre {
+    border-radius: 0.375rem !important;
+  }
 }
 
 pre > code {
@@ -35,10 +44,13 @@ code[data-line-numbers] > .line::before {
 }
 
 div[data-rehype-pretty-code-title] {
-  @apply rounded-t  px-5 py-3 font-mono text-sm font-bold text-gray-200;
+  @apply -mr-5 -ml-5 md:rounded-t  px-4 py-3 font-mono text-sm font-bold text-gray-200;
   background-color: #30322a;
 }
 
 div[data-rehype-pretty-code-title] + div > pre {
-  @apply mt-0 rounded-t-none;
+  @apply mt-0;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
 }
+
