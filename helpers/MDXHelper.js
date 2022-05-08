@@ -5,6 +5,7 @@ import formatDate from "./formatDate";
 import { bundleMDX } from "mdx-bundler";
 import readingTime from "reading-time";
 import remarkSlug from "remark-slug";
+import remarkGfm from "remark-gfm";
 import GithubSlugger from "github-slugger";
 import rehypePrettyCode from "rehype-pretty-code";
 
@@ -98,7 +99,11 @@ export async function getPostDetail(post_path, slug) {
     source: mdxSource,
     cwd: isFile ? undefined : path.join(post_path, slug),
     mdxOptions(options) {
-      options.remarkPlugins = [...(options.remarkPlugins ?? []), remarkSlug];
+      options.remarkPlugins = [
+        ...(options.remarkPlugins ?? []),
+        remarkSlug,
+        remarkGfm,
+      ];
       options.rehypePlugins = [
         ...(options.rehypePlugins ?? []),
         rehypePrettyCodeWithConf,
