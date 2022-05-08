@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital@1&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital@1&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap");
 
 body {
@@ -13,25 +13,34 @@ pre {
   background-color: #272822 !important;
 }
 
-code[data-line-numbers] {
+pre > code {
   counter-reset: line;
+  display: grid;
 }
- 
+
 code[data-line-numbers] > .line::before {
   counter-increment: line;
   content: counter(line);
- 
-  /* Other styling */
-  display: inline-block;
-  width: 1rem;
-  margin-right: 2rem;
-  text-align: right;
   color: gray;
+  margin-right: 1rem;
 }
 
+.line {
+  padding-right: 1rem;
+}
+
+.highlight {
+  margin-left: -1rem;
+  margin-right: -1rem;
+  padding-left: calc(1rem - 5px);
+  border-left-width: 5px;
+  background: rgba(200, 200, 255, 0.1);
+  border-color: #60a5fa;
+}
 
 div[data-rehype-pretty-code-title] {
-  @apply rounded-t bg-gray-700 px-5 py-3 font-mono text-sm font-bold text-gray-200;
+  @apply rounded-t  px-5 py-3 font-mono text-sm font-bold text-gray-200;
+  background-color: #30322a;
 }
 
 div[data-rehype-pretty-code-title] + div > pre {
