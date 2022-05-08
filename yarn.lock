@@ -45,6 +45,16 @@
   "resolved" "https://registry.npmjs.org/@fal-works/esbuild-plugin-global-externals/-/esbuild-plugin-global-externals-2.1.2.tgz"
   "version" "2.1.2"
 
+"@fontsource/jetbrains-mono@^4.5.8":
+  "integrity" "sha512-Wp2oUcXNFqw7pwEZdstZLv09v8lWhMscuSbmPU8VpdxPpC+kbQb6u0sOF/wZX/GZcwJHZyXBaZan0iia16r30Q=="
+  "resolved" "https://registry.npmjs.org/@fontsource/jetbrains-mono/-/jetbrains-mono-4.5.8.tgz"
+  "version" "4.5.8"
+
+"@fontsource/roboto@^4.5.5":
+  "integrity" "sha512-Pe1p+gAO6K0aLxBXlLoJRHVx352tVc/v/7DOnvM3t+FYXb+KUga9aCD1NpnDfd0kKnWXqrZyAXguyyFWDDuphw=="
+  "resolved" "https://registry.npmjs.org/@fontsource/roboto/-/roboto-4.5.5.tgz"
+  "version" "4.5.5"
+
 "@mdx-js/esbuild@^2.0.0":
   "integrity" "sha512-iwcbh7eZZh55r1/lqyrPpkIsuczmlUclulfrtc983mJncdhhhqv0g01loK2r3L0LeIzORhb8h1xUsAWneG0c6w=="
   "resolved" "https://registry.npmjs.org/@mdx-js/esbuild/-/esbuild-2.1.1.tgz"

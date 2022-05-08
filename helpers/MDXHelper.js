@@ -62,9 +62,10 @@ export async function getAllPosts(posts_path) {
     .slice()
     .filter((item) => item.is_published == true)
     .sort((a, b) => b.date - a.date)
-    .map((item) => {
+    .map((item, index) => {
       return {
         ...item,
+        id:index,
         date: formatDate(item.date),
       };
     });
