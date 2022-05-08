@@ -12,10 +12,7 @@ import rehypePrettyCode from "rehype-pretty-code";
 
 function rehypePrettyCodeWithConf() {
   const options = {
-    // Use one of Shiki's packaged themes
     theme: "monokai",
-    // Or your own JSON theme
-
     onVisitLine(node) {
       // Prevent lines from collapsing in `display: grid` mode, and
       // allow empty lines to be copy/pasted
@@ -34,6 +31,36 @@ function rehypePrettyCodeWithConf() {
 
   return rehypePrettyCode(options);
 }
+
+const getRehypeMdxCodeMeta = async () => {
+  const { visit } = await import("unist-util-visit");
+
+  return (options = {}) => {
+    return (tree) => {
+      visit(tree, "element", visitor);
+    };
+
+    function visitor(node, index, parentNode) {
+      if (node.tagName === "code" && node.data && node.data.meta) {
+        const blocks = node.data.meta.split(" ");
+
+        node.properties = blocks.reduce((props, block) => {
+          const [prop, value] = block.split("=");
+
+          if (typeof value === "undefined") {
+            props.line = prop;
+
+            return props;
+          }
+
+          props[prop] = value;
+
+          return props;
+        }, node.properties);
+      }
+    }
+  };
+};
 
 export async function getAllPosts(posts_path) {
   let slugs = await readdir(posts_path);
@@ -97,7 +124,7 @@ export async function getPostDetail(post_path, slug) {
   }
 
   let mdxSource = await readFile(postFilePath, "utf8");
-
+  const rehypeMdxCodeMeta = await getRehypeMdxCodeMeta();
   let result = await bundleMDX({
     source: mdxSource,
     cwd: isFile ? undefined : path.join(post_path, slug),
@@ -105,6 +132,7 @@ export async function getPostDetail(post_path, slug) {
       options.remarkPlugins = [...(options.remarkPlugins ?? []), remarkSlug];
       options.rehypePlugins = [
         ...(options.rehypePlugins ?? []),
+        rehypeMdxCodeMeta,
         rehypePrettyCodeWithConf,
       ];
 
@@ -114,6 +142,7 @@ export async function getPostDetail(post_path, slug) {
 
   let { content: mdxContent } = matter(mdxSource);
   let readStat = readingTime(mdxContent);
+
   const toc = mdxContent
     .split("\n")
     .filter((line) => line.match(/^#{1,3}\s/)) // only match level 1-3

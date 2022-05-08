@@ -28,3 +28,12 @@ code[data-line-numbers] > .line::before {
   text-align: right;
   color: gray;
 }
+
+
+div[data-rehype-pretty-code-title] {
+  @apply rounded-t bg-gray-700 px-5 py-3 font-mono text-sm font-bold text-gray-200;
+}
+
+div[data-rehype-pretty-code-title] + div > pre {
+  @apply mt-0 rounded-t-none;
+}

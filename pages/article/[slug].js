@@ -89,7 +89,7 @@ export default function Post({ code, frontmatter, slug, readingTime, toc }) {
         <div className="prose prose-green max-w-full mt-5">
           <Component
             components={{
-              pre: Pre
+              pre: Pre,
             }}
           />
         </div>
