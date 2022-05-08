@@ -4,12 +4,12 @@ import path from "path";
 import formatDate from "./formatDate";
 import { bundleMDX } from "mdx-bundler";
 import readingTime from "reading-time";
-let { readdir, readFile, lstat, access } = fs.promises;
 import remarkSlug from "remark-slug";
 import GithubSlugger from "github-slugger";
-const slugger = new GithubSlugger();
 import rehypePrettyCode from "rehype-pretty-code";
 
+const { readdir, readFile, lstat, access } = fs.promises;
+const slugger = new GithubSlugger();
 function rehypePrettyCodeWithConf() {
   const options = {
     theme: "monokai",
@@ -31,8 +31,6 @@ function rehypePrettyCodeWithConf() {
 
   return rehypePrettyCode(options);
 }
-
-
 
 export async function getAllPosts(posts_path) {
   let slugs = await readdir(posts_path);
