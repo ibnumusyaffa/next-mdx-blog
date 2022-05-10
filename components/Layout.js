@@ -1,19 +1,16 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import Meta from "../components/Meta";
 
-
-function Layout({ children, meta }) {
+function Layout({ children }) {
   return (
     <React.Fragment>
-      <Meta {...meta}></Meta>
       <nav>
         <div className="h-20 flex justify-center border-b">
           <div className="px-5 md:px-0 w-full md:w-[45%]   h-full flex items-center justify-between">
             <Link href="/">
               <a className="flex items-center space-x-3 ">
                 <div className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-blue-600 to-teal-500">
-                 Ibnu.dev
+                  Ibnu.dev
                 </div>
               </a>
             </Link>

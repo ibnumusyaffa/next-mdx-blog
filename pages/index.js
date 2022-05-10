@@ -1,14 +1,15 @@
 import React from "react";
 import Layout from "../components/Layout";
 import Link from "next/link";
-
-import Tag from "../components/Tag";
-import { getAllPosts } from "../helpers/MDXHelper";
-
 import path from "path";
+import Tag from "../components/Tag";
+import { getPosts } from "../helpers/mdx";
+import Meta from "../components/Meta";
+
 function Index({ posts }) {
   return (
     <Layout>
+      <Meta></Meta>
       <div className="flex flex-col space-y-8">
         {posts.map((item) => (
           <Link key={item.id} href={`/article/${item.slug}`}>
@@ -36,8 +37,8 @@ function Index({ posts }) {
 }
 
 export async function getStaticProps() {
-  const POSTS_PATH = path.join(process.cwd(), "content", "articles");
-  let posts = await getAllPosts(POSTS_PATH);
+  const post_path = path.join(process.cwd(), "content", "articles");
+  let posts = await getPosts(post_path);
   return {
     props: {
       posts,
