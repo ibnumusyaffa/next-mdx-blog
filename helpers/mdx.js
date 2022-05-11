@@ -34,23 +34,23 @@ function rehypePrettyCodeWithConf() {
   return rehypePrettyCode(options);
 }
 
-export async function getPosts(post_path) {
-  let slugs = await readdir(post_path);
+export async function getPosts(postPath) {
+  let slugs = await readdir(postPath);
 
   let posts = await Promise.all(
     slugs.map(async (slug) => {
-      let stat = await lstat(path.join(post_path, slug));
+      let stat = await lstat(path.join(postPath, slug));
 
       let filePath = stat.isFile()
-        ? path.join(post_path, slug)
-        : path.join(post_path, slug, "index.mdx");
+        ? path.join(postPath, slug)
+        : path.join(postPath, slug, "index.mdx");
 
       let fileBuffer = await readFile(filePath, "utf-8");
 
-      let { data, content } = matter(fileBuffer);
+      let { data: frontMatter, content } = matter(fileBuffer);
       let readStat = readingTime(content);
       return {
-        ...data,
+        ...frontMatter,
         slug: `${slug.replace(/\.mdx?$/, "")}`,
         readingTime: readStat.text,
       };
@@ -70,8 +70,8 @@ export async function getPosts(post_path) {
     });
 }
 
-export async function getPaths(post_path) {
-  let slugs = await readdir(post_path);
+export async function getPaths(postPath) {
+  let slugs = await readdir(postPath);
 
   let paths = slugs.map((slug) => {
     return {
@@ -84,16 +84,16 @@ export async function getPaths(post_path) {
   return paths;
 }
 
-export async function getPost(post_path, slug) {
-  let isExist = fs.existsSync(path.join(post_path, `${slug}.mdx`));
-  let filePath = isExist
-    ? path.join(post_path, `${slug}.mdx`)
-    : path.join(post_path, slug, "index.mdx");
+export async function getPost(postPath, slug) {
+  let isFile = fs.existsSync(path.join(postPath, `${slug}.mdx`));
+  let filePath = isFile
+    ? path.join(postPath, `${slug}.mdx`)
+    : path.join(postPath, slug, "index.mdx");
 
   let source = await readFile(filePath, "utf8");
   let mdxResult = await bundleMDX({
     source,
-    cwd: isExist ? undefined : path.join(post_path, slug),
+    cwd: isFile ? undefined : path.join(postPath, slug),
     mdxOptions(options) {
       options.remarkPlugins = [
         ...(options.remarkPlugins ?? []),
