@@ -4,13 +4,13 @@
 
 
 
-pre {
-  font-family: "Jetbrains Mono", monospace;
-  background-color: #272822 !important;
-  border-radius: unset  !important;
-  @apply -mr-5 -ml-5
-}
 
+pre {
+  @apply md:mx-0 -mx-5;
+  font-family: "Jetbrains Mono", monospace !important;
+  background-color: #272822 !important;
+  border-radius: unset !important;
+}
 
 @media (min-width: 768px) {
   pre {
@@ -23,18 +23,18 @@ pre > code {
   display: grid;
 }
 
-code[data-line-numbers] > .line::before {
+pre > code > .line::before {
   counter-increment: line;
   content: counter(line);
   color: gray;
   margin-right: 1rem;
 }
 
-.line {
+pre > code > .line {
   padding-right: 1rem;
 }
 
-.highlight {
+pre > code > .highlight {
   margin-left: -1rem;
   margin-right: -1rem;
   padding-left: calc(1rem - 5px);
@@ -43,30 +43,41 @@ code[data-line-numbers] > .line::before {
   border-color: #60a5fa;
 }
 
+/* styling for title bar  */
+
 div[data-rehype-pretty-code-title] {
-  @apply -mr-5 -ml-5 md:rounded-t  px-4 py-3 font-mono text-sm font-bold text-gray-200;
+  @apply md:mx-0 -mx-5 md:rounded-t  px-4 py-3 font-mono text-sm font-bold text-gray-200;
   background-color: #30322a;
 }
 
 div[data-rehype-pretty-code-title] + div > pre {
-  @apply mt-0;
+  margin-top: 0px !important;
   border-top-left-radius: 0 !important;
   border-top-right-radius: 0 !important;
 }
 
-:not(pre) > code{
-  color: #ec4899 !important;
-  font-weight: 600;
-  font-size: .875em;
-  background-color: #f5f5f5;
-  padding: 2px 4px;
-  border-radius: 0.25rem;
-}
-
+/* styling for <code>  */
 :not(pre) > code::before{
   content: none !important;
 }
 
 :not(pre) > code::after{
   content: none !important;
+}
+
+
+/* styling <code> without data-languange */
+:not(pre) > code:not([data-language]){
+  @apply px-1 py-0.5 rounded text-sm font-semibold;
+  color: #ec4899 !important;
+  background-color: #f5f5f5;
+
+}
+
+/* styling for <code> with data-languange  */
+
+:not(pre) > code[data-language] {
+  @apply px-1 py-0.5 rounded text-sm;
+  font-family: "Jetbrains Mono", monospace;
+  background-color: #272822;
 }
