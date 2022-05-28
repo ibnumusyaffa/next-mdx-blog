@@ -2,7 +2,7 @@
 date: 2021-05-14
 category: Javascript
 category_color: yellow
-title: "7 method array bawaan Javascript yang sering digunakan"
+title: "Metode array pada Javascript yang sering digunakan"
 description: null
 thumbnail: blog/js.jpg
 show_thumbnail: true
@@ -12,32 +12,33 @@ is_published: true
 
 ## 1. Array.map()
 
-`Array.map()` akan membuat array baru berdasarkan hasil dari operasi setiap element array yang ada
+`Array.map()` akan membuat array baru berdasarkan hasil dari operasi setiap element array yang ada tanpa mengubah/*mutate* array existing
 
 ```javascript
-let umur = [10, 15, 20, 25, 30, 35, 40];
+let number = [10, 15, 20, 25, 30, 35, 40];
 
-let umur2Kali = umur.map((item) => {
+let multipliedNumber = umur.map((item) => {
   return item * 2;
 });
 
-console.log(umur2Kali);
+console.log(multipliedNumber );
 //[20, 30, 40, 50, 60, 70, 80]
+console.log(number); // array number tidak berubah sama sekali
+//[10, 15, 20, 25, 30, 35, 40]; 
 ```
 
 ## 2. Array.filter()
 
-`Array.filter()` akan membuat array baru yang berisi element array yang memenuhi kriteria saja.
+`Array.filter()` akan membuat array baru yang berisi element array yang memenuhi kriteria.
 
 ```javascript
-let umur = [10, 15, 20, 25, 30, 35, 40];
+let number = [10, 15, 20, 25, 30, 35, 40];
 
-let umurBaru = umur.filter((item) => {
-  //cari umur 25 tahun keatas
+let newNumber = umur.filter((item) => {
   return item >= 25;
 });
 
-console.log(umurBaru);
+console.log(newNumber);
 //[25, 30, 35, 40]
 ```
 
@@ -46,9 +47,9 @@ console.log(umurBaru);
 `Array.every()` akan mengembalikan nilai `true` jika **semua element** array memenuhi kriteria yang ditentukan.
 
 ```javascript
-let angka = [10, 15, 20, 25, 30, 35, 40];
+let number = [10, 15, 20, 25, 30, 35, 40];
 
-let isAllPositive = angka.filter((item) => {
+let isAllPositive = number.filter((item) => {
   return item > 0;
 });
 
@@ -61,10 +62,9 @@ console.log(isAllPositive);
 jika **salah satu** element memenuhi kriteria yang ditentukan, `Array.some()` akan mengembalikan nilai `true`, berbeda dengan `Array.every()` dimana semua element harus memenuhi kriteria yang ada.
 
 ```javascript
-let umur = [10, 15, 20, 25, 30, 35, -40];
+let number = [10, 15, 20, 25, 30, 35, -40];
 
-let hasNegative = umur.some((item) => {
-  //cari umur 25 tahun keatas
+let hasNegative = number.some((item) => {
   return item < 0;
 });
 
@@ -77,20 +77,20 @@ console.log(hasNegative);
 `Array.find()` akan mengembalikan satu element pada array, yang pertama kali memenuhi kriteria yang ditentukan, jika tidak ada yang memenuhi kriteria, maka akan mengembalikan nilai `undefined`
 
 ```javascript
-let angka = [10, 15, 20, 25, 30, 35, 40];
+let number = [10, 15, 20, 25, 30, 35, 40];
 
-let cari = angka.find((item) => {
+let find = number.find((item) => {
   return item >= 23;
 });
 
-console.log(cari);
+console.log(find);
 // 25
 
-let cariLagi = angka.find((item) => {
+let findAgain = number.find((item) => {
   return item >= 50;
 });
 
-console.log(cariLagi);
+console.log(findAgain);
 // undefined
 ```
 
@@ -99,10 +99,11 @@ console.log(cariLagi);
 `Array.includes()` akan menentukan apakah suatu array mempunyai value tertentu didalamnya dengan mengembalikan nilai `true` atau `false`
 
 ```javascript
-const pets = ["kucing", "anjing", "merpati", "kelinci"];
+let pets = ["cat", "dog", "bird", "rabbit"];
 
-console.log(pets.includes("kucing"));
-// true
+let hasCat = pets.includes("cat")
+
+console.log(hasCat); // true
 ```
 
 ## 7. Array.findIndex()
@@ -110,12 +111,19 @@ console.log(pets.includes("kucing"));
 `Array.findIndex()` akan mengembalikan nomor `index` element yang pertama memenuhi kriteria yang ditentukan
 
 ```javascript
-const angka = [5, 12, 8, 80, 44];
+let number = [5, 12, 8, 80, 44];
 
-const index = angka.findIndex((item) => {
+let index = number.findIndex((item) => {
   return item > 13;
 });
 
 console.log(index);
-// 3, index ke 3 element pertama yang mempunyai nilai > 13
+ // 3, index ke 3 element pertama yang mempunyai nilai > 13
+
+let notFound = number.findIndex((item) => {
+  return item > 50;
+});
+
+console.log(notFound) 
+// akan mengembalikan nilai -1 jika tidak ditemukan data yang sesuai
 ```

@@ -17,7 +17,7 @@ function Header({ frontmatter, readingTime }) {
   return (
     <React.Fragment>
       <header className="mb-10 mt-3 flex md:items-center flex-col">
-        <h1 className="text-3xl md:text-4xl  font-semibold md:text-center">
+        <h1 className="text-3xl md:text-4xl  font-semibold md:text-center capitalize">
           {frontmatter.title}
         </h1>
         <div className="flex space-x-3 mt-5">
