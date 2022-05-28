@@ -1,0 +1,73 @@
+---
+date: 2022-05-28
+category: General
+category_color: blue
+title: "Mengenal Big O notation dalam pemrograman"
+description: "Pada artikel ini kita akan berkenalan dengan big O notation dan mempraktekanya dengan javascript"
+thumbnail: blog/js.jpg
+show_thumbnail: false
+show_toc: false
+is_published: true
+---
+
+Semua pemrogram pasti ingin semua kode yang ia tulis menghasilkan kode efisien, dari sini muncul pertanyaan, bagaimana kita menentukan mana kode yang efisien dan mana yang bukan ? nah itu mengetahuinya kita bisa memakai konsep Big O notation, sebelum itu mari kita bahasa dulu pengertian algoritma
+
+## Apa itu algoritma ?
+
+Singkatnya algoritma adalah langkah-langkah yang perlu dilakukan untuk menyelesaikan suatu tugas, bayangkan langkah-langkah apa saja yang mesti dilakukan untuk membuat sebuah kue. kita pasti setuju, bahwa suatu tugas itu dapat dilakukan dengan beragam cara, ada yang cepat ada yang lambat.
+
+## Jadi apa itu Big O notation ?
+
+Big O notation adalah sebuah notasi matematis, untuk mengkomunikasikan seberapa efisien suatu algoritma bereaksi terhadapt input yang berikan atau jumlah data yang perlu diproses. Efisiensi dalam hal ini adalah efisiensi secara umum, karena bisa jadi 2 algoritma sekilas sama, tetapi ketika dibenchmark hasilnya cukup berbeda, hal bisa jadi karena beberapa kasus sudah dioptimasi otomatis oleh compiler/intrepeter dari bahasa yang kita pakai. efisien disini bisa dilihat dari 2 sisi
+
+### 1. Time Complexity
+
+Yaitu berapa waktu yang dibutuhkan algoritma tersebut menyelesaikan suatu tugas.
+
+### 2. Space Complexity
+
+Yaitu berapa memory yang dibutukan algoritma tersebut menyelesaikan suatu tugas. ada kalanya suatu algoritma lebih cepat dalam menyelesaikan suatu tugas, tetapi membutuhkan memory lebih banyak.
+
+Nah dari 2 sisi diatas, ketika kita berbicara tentang big o notation, umumnya yang dibahas adalah tentang time complexity. berikut notasi-notasi yang akan kita bahas
+
+### 1. O(1) atau constant time
+
+Contoh function yang mempunya notation O(1)
+
+```javascript
+let data = [0, 2, 3, 4, 5, 7, 8];
+function getFirstAndSecondData(data) {
+  if (data.length < 2) {
+    throw "not enough";
+  }
+  let first = data[0];
+  let second = data[1];
+  return {
+    first,
+    second,
+  };
+}
+
+console.log(getFirstAndSecondData(data));
+```
+
+didalam function `getFirstAndSecondData()` kita bisa mengetahui secara umum diperlukan minimal 4 baris yang di eksekusi untuk mengambil array index 0 dan index 1 atau bisa dinotasikan O(4), dan function/algoritma ini akan tetap konstan berapapun jumlah input yang diberikan, apakah itu array berisi 10 data atau 100rb data, akan tetap sama. maka O(4) ini bisa kita sederhakan menjadi O(1).
+
+### 2. O(n) atau linear time
+
+berikut contoh kodenya
+```javascript
+let data = ["dog", "bird", "rabbit", "cat"];
+
+function findCat(data) {
+  for (const item of data) {
+    if (item === "cat") {
+      return item;
+    }
+  }
+
+  return null
+}
+console.log(findCat(data));
+```
+pada function `findCat()` ini kita bisa mengasumsikan function ini akan mengeksekusi perintah didalamnya minimal 1 sampai dengan 4 kali (jumlah data yang dimasukkan), jika data yang berisi "cat" ada diindex pertama maka cukup 1 kali eksekusi, jika "cat" berada diakhir data, maka akan dieksusi sebesar 4 kali. singkatnya notasinya bisa dari 0(1) sampai dengan O(4), nah dari sini kita perlu memahami bahwa notasi big O akan selalu ditulis dalam bentuk worst case scenarionya, maka dari itu fungsi tersebut memiliki notasi O(n), karena kode yang dieksekusi akan bersifat liner terhadap jumlah data yang masukkan.
