@@ -1,0 +1,118 @@
+---
+date: 2022-05-29
+category: General
+category_color: blue
+title: "functional programming dengan javascript"
+description: ""
+thumbnail:
+show_thumbnail: false
+show_toc: false
+is_published: true
+---
+
+Kalau kamu menggunakan javascript sebagai bahasa sehari-hari, pasti pernah mendengan istilah functional programming, jadi apa sih maksudnya functional programming ini ?
+
+Functional programming adalah sebuah paradigma pemprograman atau cara berpikir dalam membangun sebuah software dengan function sebagai building block dasar dan tentunya dengan beberapa konsep umum yang akan kita bahas dibawah.
+
+## 1. First Class Function
+
+Sebuah bahasa pemrograman dikatakan mempunyai konsep **first class function** ketika bahasa tersebut menyikapi sebuah function layaknya variabel pada umumnya, artinya kita dapat menggunakan function sebagai paramater, return value, dan meng-assign nya sebagai value ke sebuah variabel.
+
+contoh menggunakan function sebagai paramater sebuah function
+
+```javascript
+function runThisFunction(fun1, fun2) {
+  fun1();
+  fun2();
+}
+
+function sayHello() {
+  console.log("Hello");
+}
+function sayWorld() {
+  console.log("World");
+}
+
+runThisFunction(sayHello, sayWorld);
+//output: Hello
+//output: World
+```
+
+contoh mengembalikan atau mereturn function dari sebuah function dan mengassignnya ke sebuah variabel
+
+```javascript
+function createAdder(value1) {
+  return function (value2) {
+    return value1 + value2;
+  };
+}
+
+let addFive = createAdder(5);
+console.log(addFive(10)); //output: 15
+
+let addTwo = createAdder(2);
+console.log(addTwo(10)); //output: 12
+
+```
+
+## 2. Pure function
+
+Sebuah function dikatakan Pure jika memenuhi 2 kondisi, diantaranya
+
+1. Jika diberikan input yang sama, akan selalu memberikan output yang sama.
+2. Tidak mempunyai side effect.
+
+```javascript
+function add(number1, number2) {
+  return number1 + number2;
+}
+```
+
+contoh kita mempunyai function yang bernama add, berapa kalipun function ini dijalan, dengan input yang sama maka menghasilkan output yang sama juga. hal ini bisa dicapai karena function ini tidak mempunyai side effect, nah dari sini muncul pertanyaan, kriteria seperti yang dinamakan sebuah fungsi tidak mempunya side effect, beberapa contoh diantaranya adalah
+
+- Tidak mengubah atau membaca global variabel.
+- Tidak mengubah paramater yang diberikan (terutama object)
+- Tidak ada akses IO (network, file, disk, api)
+
+contoh bukan pure function dalam menghandle object
+
+```javascript
+//bukan pure function
+function doSomeWork(obj) {
+  obj.value = obj.value + 1;
+  //do some thing
+}
+
+let counter = {
+  name:"chicken"
+  value: 1,
+};
+
+doSomeWork(counter);
+// function doSomeWork mengubah/mutate counter.value
+console.log(counter.value); // 🔴 output: 2 
+
+```
+
+contoh pure function dalam menghandle object
+
+```javascript
+//pure function
+function doSomeWork(obj) {
+  let newObj = { ...obj, value: obj.value + 1 };
+  return newObj
+}
+
+let counter = {
+  name:"chicken",
+  value: 1,
+};
+
+//function ini akan mereturn object baru daripada mengubah object existing
+let newCounter = doSomeWork(counter);
+//object baru dengan value yang sudah terupdate
+console.log(newCounter.value); //✅ output: 2
+
+//object existing tidak berubah atau tidak termutasi
+console.log(counter.value); //✅ output: 1
+```

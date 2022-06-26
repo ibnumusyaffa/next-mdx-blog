@@ -24,6 +24,9 @@ pre > code {
 }
 
 pre > code > .line::before {
+  display: inline-block;
+  width: 1rem;
+  text-align: right;
   counter-increment: line;
   content: counter(line);
   color: gray;
