@@ -13,7 +13,7 @@ function Index({ posts }) {
       <div className="flex flex-col space-y-8">
         {posts.map((item) => (
           <Link key={item.id} href={`/article/${item.slug}`}>
-            <a className="group space-y-2 ">
+            <div className="group space-y-2 ">
               <div className="text-2xl font-bold text-gray-900 hover:underline capitalize">
                 {item.title}
               </div>
@@ -28,7 +28,7 @@ function Index({ posts }) {
               </div>
 
               <div className="text-gray-700">{item.description}</div>
-            </a>
+            </div>
           </Link>
         ))}
       </div>

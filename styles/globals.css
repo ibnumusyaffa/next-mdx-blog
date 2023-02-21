@@ -3,8 +3,6 @@
 @tailwind utilities;
 
 
-
-
 pre {
   @apply md:mx-0 -mx-5;
   font-family: "Jetbrains Mono", monospace !important;
