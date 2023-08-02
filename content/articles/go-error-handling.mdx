@@ -1,0 +1,417 @@
+---
+date: 2023-08-02
+category: Go
+category_color: blue
+title: "Panduan ringkas error handling di Go"
+description: null
+thumbnail: blog/js.jpg
+show_thumbnail: false
+show_toc: true
+is_published: true
+---
+
+## Error as values
+
+Tidak seperti bahasa pada umumnya seperti Java, Javascript, PHP dll. yang mempunyai `try catch` atau `exception` untuk menghandle error, Go cukup berbeda dalam hal menghandle error, Go memperlakukan error layaknya value secara umum.
+
+Perhatikan kode dibawah ini, kode tersebut memanggil function `os.Open` yang akan mengembalikan dua return value, yang pertama adalah `File`, yang kedua adalah `error`, disini kita mengetahui, error digolang hanyalah value pada umumnya.
+
+```go
+f, err := os.Open("filename.ext")
+if err != nil {
+    //do something with error value
+}
+// do something with the open *File f
+```
+
+## Error type
+
+`error` di Go pada dasarnya hanyalah sebuah built in interface type sebagai berikut,
+
+```go
+type error interface {
+    Error() string
+}
+```
+
+Di Go, tidak ada keyword `implements`,yang artinya semua type yang mengimplementasikan method `Error() string` secara implicit sudah memenuhi kontrak interface error.
+
+## Menggunakan error di Go
+
+Untuk menggunakan built in error di Go, kamu bisa menggunakan 2 package bawaan dari go, package `errors` dan `fmt`
+
+```go
+package main
+
+import "errors"
+
+func divide(a, b int) (int, error) {
+    if b == 0 {
+        return 0, errors.New("cannot divide by zero")
+    }
+    return a / b, nil
+}
+
+```
+
+gunakan `fmt.Errorf` jika ingin message yang dinamis
+
+```go
+package main
+
+import "fmt"
+
+func divide(a, b int) (int, error) {
+    if b == 0 {
+        return 0, fmt.Errorf("can't divide '%d' by zero", a)
+    }
+    return a / b, nil
+}
+
+```
+
+dari sisi pemanggil kita bisa mengecek error atau tidak menggunakan kontrol struktur (if, switch)
+
+```go
+package main
+
+func main(){
+    result1, err := Divide(1, 2)
+    if err != nil {
+        //do something with error
+    }
+
+    //mengabaikan error secara explicit menggunakan " _ "
+    result2, _ := Divide(10, 5)
+
+}
+
+```
+
+Beberap point yang penting yang bisa disimpulkan dari kode diatas
+
+- Jika tidak ada error, kita mengembalikan nilai `nil`, yaitu zero value dari error type
+- Karena zero value dari error adalah nil, kita bisa mengecek error menggunakan kontrol struktur semisal `if err != nil` atau `switch`
+- Jika terdapat multiple return value, secara konvensi, error value selalu ditempatkan diposisi terakhir
+- Gunakan lowercase untuk error message
+- Gunakan variable name `_`, untuk mengatakan secara explicit bahwa kita mengabaikan sebuah error secara sengaja
+
+## Menangani spesifik error dengan Sentinel error
+
+ketika menerima sebuah error value, hal paling dasar yang biasa dilakukan adalah mengecek apakah error tersebut `nil` atau tidak, tetapi bagaimana kita menghandle spesifik error tertentu ? daripada menggunakan string untuk menghandle spesifik error, kita bisa menggunakan predefined sentinel `error`.
+
+```go
+package main
+
+import (
+	"errors"
+	"fmt"
+)
+
+// predefined sentinel error
+var ErrLevel1 = errors.New("error level 1")
+var ErrLevel2 = errors.New("error level 2")
+var ErrLevel3 = errors.New("error level 3")
+
+func giveMeError(level int) error {
+
+	if level == 0 {
+		return errors.New("reguler error")
+	}
+
+	if level == 1 {
+		return ErrLevel1
+	}
+
+	if level == 2 {
+		return ErrLevel2
+	}
+
+	if level == 3 {
+		return ErrLevel3
+	}
+
+	return nil
+}
+
+func main() {
+	err := giveMeError(1)
+	if err != nil {
+		switch {
+		case err == ErrLevel1:
+			fmt.Println("handle level 1:", err)
+		case errors.Is(err, ErrLevel2):
+			fmt.Println("handle level 2:", err)
+
+		// tidak direkomendasikan menggunakan string
+		case err.Error() == "error level 3":
+			fmt.Println("handle level 3:", err)
+		default:
+			fmt.Println("default:", err)
+		}
+	}
+}
+```
+
+kita bisa menggunakan operator perbandingan `err == ErrLevel1` atau yang lebih direkomendasikan menggunakan function `errors.Is`. yang perlu diperhatikan adalah penggunaan operator perbandingan terhadap string error message tidak direkomendasikan karena akan menyulitkan ketika messagenya berubah
+
+Kemudian dari sisi konvensi penulisan sentinel error, disarankan menggunakan prefix `Err` semisal `ErrSomething` , `ErrInvalid`, `ErrFileNotExist`
+
+## Menambahkan ekstra informasi dengan custom error type
+
+pada dasarnya `error` hanyalah sebuah interface di Go, kita bisa membuat custom error type sendiri dengan tambahan informasi yang diinginkan. Berikut adalah contoh dimana kita membuat custom error type dengan tambahan property `Query` didalamnya.
+
+```go
+package main
+
+import (
+	"errors"
+	"fmt"
+)
+
+type QueryError struct {
+	Query   string
+	Message string
+}
+
+// implement method Error() ke QueryError type agar sesuai kontrak interface error()
+func (qe QueryError) Error() string {
+	return qe.Message
+}
+
+//function constructor hanya untuk mempermudah pembuatan error
+func NewQueryError(message string, query string) *QueryError {
+  //pastikan pointer type yang direturn
+	return &QueryError{Message: message, Query: query}
+}
+
+func doSomething(level int) error {
+	if level == 1 {
+		return NewQueryError("Some query error", "Select * from blabla")
+    //kita juga bisa membuat error tanpa function constructor, sebagai contohnya
+    //return  &QueryError{Message: "Some query error", Query: "Select * from blabla"}
+	}
+
+	if level == 2 {
+		return errors.New("reguler error")
+	}
+	return nil
+}
+
+func main() {
+	err := doSomething(1)
+	if err != nil {
+		//deklrasikan variabel pointer of QueryError
+		var myQueryError *QueryError
+		//check apakah error adalah QueryError type
+    //jika iya, extract informasi dari error ke myQueryError
+		if errors.As(err, &myQueryError) {
+			//dari sini informasi tambahan sebagai contoh : myQueryError.Query
+			fmt.Println("query error: ", myQueryError.Query)
+		} else {
+			fmt.Println("reguler error:", err)
+		}
+	}
+}
+```
+
+- Pada line **40**, kita mengecek apakah error value tersebut adalah type `QueryError` dengan `erorrs.As`, jika true, function tersebut juga akan meng-assign tambahan informasi ke pointer variabel `myQueryError`, sehingga kita bisa mengaksesnya seperti contoh diatas `myQueryError.Query`.
+- Difunction `doSomething` kita tetap menggunakan standar `error` sebagai return type, bukan `QueryError`
+
+## Errors Wrapping
+
+Di Go 1.13, beberapa APIs baru ditambahkan ke dalam package `errors` dan `fmt` untuk memudahkan pembuatan `error` yang dapat menampung `error` lain.
+contohnya adalah verb `%w` di `fmt.Errorf`. ketika kita menggunaan verb ini `fmt.Errorf("in fileChecker: %w", err)`, error yang telah kita buat akan mempunyai referensi ke error lain yang kita masukkan ke argument `%w`. berikut contoh lengkapnya
+
+```go
+package main
+
+import (
+	"errors"
+	"fmt"
+	"os"
+)
+
+func fileChecker(name string) error {
+	f, err := os.Open(name)
+	if err != nil {
+		return fmt.Errorf("in fileChecker: %w", err)
+	}
+	f.Close()
+	return nil
+}
+
+func main() {
+	err := fileChecker("not_here.txt")
+	if err != nil {
+    fmt.Println(err)
+		if wrappedErr := errors.Unwrap(err); wrappedErr != nil {
+			fmt.Println(wrappedErr)
+		}
+	}
+}
+```
+
+ketika code tersebut dirun, akah menghasilkan output sebagai berikut
+
+```sh
+in fileChecker: open not_here.txt: no such file or directory
+open not_here.txt: no such file or directory
+```
+
+Pada line **22** kita bisa meng-unwrap error dengan method `errors.Unwrap(err)`, dari situ kita bisa melihat original errornya yaitu **"open not_here.txt: no such file or directory"** yang berasal dari function `os.Open` yang ada didalam `fileChecker`.
+
+Pada praktiknya `errors.Unwrap` ini jarang dipakai, karena jika kita mempunyai wrapped error yang bertingkat akan menyulitkan jika harus meng-unwrap berulang-kali, maka dari itu, lebih disarankan menggunakan `errors.Is` atau `errors.As` jika ingin mengecek suatu **error chain** mempunya spesifik error tertentu
+
+### Mengecek wrapped sentinel error dengan errors.Is
+
+Wrapping errors sangat berguna ketika kita ingin menambahkan ekstra informasi tanpa kehilangan original error yang ada. tapi solusi ini menimbulkan problem ketika error yang diwrapped adalah sentinel error, kita tidak bisa menggunakan operator `== `seperti ini `err == ErrSomething` ketika mengecek sebuah error. Go menyediakan solusinya dari package errors yaitu `errors.Is` yang sudah kita pakai sebelumnya, perhatikan contoh berikut
+
+```go
+package main
+
+import (
+	"errors"
+	"fmt"
+	"os"
+)
+
+func fileChecker(name string) error {
+	f, err := os.Open(name)
+	if err != nil {
+		return fmt.Errorf("in fileChecker: %w", err)
+	}
+	f.Close()
+	return nil
+}
+
+func main() {
+	err := fileChecker("not_here.txt")
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			fmt.Println("using errors.Is")
+		}
+
+    //this is not working
+		if err == os.ErrNotExist {
+			fmt.Println("err == os.ErrNotExist")
+		}
+	}
+}
+
+```
+
+ketika code tadi dijalankan akan menghasilkan output `using errors.Is`, dari sini kita bisa mengetahui, meskipun error tersebut sudah diwrap, kita masih bisa mengetahui error tersebut adalah error `os.ErrNotExist`. `errors.Is` juga masih bekerja ketika kita punya error yang sudah diwrap beberapa kali
+
+### Mengecek wrapped custom error dengan errors.As
+
+ketika error yang diwrap adalah custom error type, kita bisa menggunakan `errors.As` untuk mengecek spesifik error tertentu seperti biasa, `errors.As` juga akan masih bekerja jika custom error sudah diwrap beberapa kali dari fungsi ke fungsi.
+
+```go
+package main
+
+import (
+	"errors"
+	"fmt"
+)
+
+type QueryError struct {
+	Query   string
+	Message string
+}
+
+func (qe QueryError) Error() string {
+	return qe.Message
+}
+
+func getSomething() error {
+	return &QueryError{Query: "Select * from blabla bla", Message: "fail query"}
+}
+
+func doSomething() error {
+	err := getSomething()
+	if err != nil {
+		return fmt.Errorf("do something error: %w", err)
+	}
+
+	return nil
+}
+
+func main() {
+	err := doSomething()
+	if err != nil {
+		var myQueryError *QueryError
+		if errors.As(err, &myQueryError) {
+			fmt.Println(err)
+		} else {
+			fmt.Println("reguler error:", err)
+		}
+	}
+}
+
+
+```
+
+### Menge-wrap suatu errors dengan custom error type
+
+Kita sudah membahas bagaimana cara menge-wrap suatu error dengan `fmt.Errorf` dan verb `%w`, lalu bagaimana menge-wrap error jika kita menggunakan custom error type ? yang kita perlu lakukan adalah dengan menambah method `Unwrap()` ke custom error type, dan menambah satu property untuk menyimpan referensi error lain, berikut adalah contoh kodenya.
+
+```go
+package main
+
+import (
+	"errors"
+	"fmt"
+)
+
+type QueryError struct {
+	Query   string
+	Message string
+	//wrapped error, kita bisa menggunakan nama property yang lain
+	Err error
+}
+
+func (qe QueryError) Error() string {
+	return qe.Message
+}
+
+// tambahkan method ini ke custom error type dengan return wrapped error
+func (qe QueryError) Unwrap() error {
+	return qe.Err
+}
+
+
+var ErrSomething = errors.New("error something")
+
+func doSomething(level int) error {
+	if level == 1 {
+    return &QueryError{Message: "Some query error", Query: "Select * from blabla", Err: ErrSomething}
+	}
+
+	if level == 2 {
+		return errors.New("reguler error")
+	}
+	return nil
+}
+
+func main() {
+	err := doSomething(1)
+	if err != nil {
+		if errors.Is(err, ErrSomething) {
+			fmt.Println("ErrSomething")
+		} else {
+			fmt.Println("reguler error:", err)
+		}
+	}
+}
+
+
+```
+di line **41** kita bisa mengecek seperti biasa menggunakan `errors.Is` untuk sentinel error atau `errors.Is` jika yang diwrap adalah custom error type lain 
+
+## Referensi
+
+- [Working with Errors in Go 1.13](https://go.dev/blog/go1.13-errors)
+- [Effective Error Handling in Golang](https://earthly.dev/blog/golang-errors/)
+- [Don’t just check errors, handle them gracefully](https://dave.cheney.net/2016/04/27/dont-just-check-errors-handle-them-gracefully)
+- [Learning Go Book](https://www.amazon.com/Learning-Go-Idiomatic-Real-World-Programming/dp/1492077216)

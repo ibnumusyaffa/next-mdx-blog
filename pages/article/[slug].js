@@ -37,7 +37,6 @@ function Header({ frontmatter, readingTime }) {
           <Image
             className="rounded"
             src={"/" + frontmatter.thumbnail}
-            layout="responsive"
             width={1920}
             height={1080}
           />
