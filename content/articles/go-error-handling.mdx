@@ -1,8 +1,8 @@
 ---
-date: 2023-08-02
+date: 2023-08-03
 category: Go
 category_color: blue
-title: "Panduan ringkas error handling di Go"
+title: "Panduan Ringkas Error Handling di Go"
 description: null
 thumbnail: blog/js.jpg
 show_thumbnail: false
@@ -352,7 +352,7 @@ func main() {
 
 ```
 
-### Menge-wrap suatu errors dengan custom error type
+### Menge-wrap suatu error dengan custom error type
 
 Kita sudah membahas bagaimana cara menge-wrap suatu error dengan `fmt.Errorf` dan verb `%w`, lalu bagaimana menge-wrap error jika kita menggunakan custom error type ? yang kita perlu lakukan adalah dengan menambah method `Unwrap()` ke custom error type, dan menambah satu property untuk menyimpan referensi error lain, berikut adalah contoh kodenya.
 
@@ -375,7 +375,7 @@ func (qe QueryError) Error() string {
 	return qe.Message
 }
 
-// tambahkan method ini ke custom error type dengan return wrapped error
+// tambahkan method ini ke custom error type dengan return error yang diwrap
 func (qe QueryError) Unwrap() error {
 	return qe.Err
 }
@@ -407,7 +407,7 @@ func main() {
 
 
 ```
-di line **41** kita bisa mengecek seperti biasa menggunakan `errors.Is` untuk sentinel error atau `errors.Is` jika yang diwrap adalah custom error type lain 
+di line **41** kita bisa mengecek seperti biasa menggunakan `errors.Is` untuk sentinel error atau `errors.As` jika yang diwrap adalah custom error type. 
 
 ## Referensi
 

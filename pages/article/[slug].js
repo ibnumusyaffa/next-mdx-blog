@@ -47,7 +47,7 @@ function Header({ frontmatter, readingTime }) {
 }
 
 function TableOfContent({ toc }) {
-  let [collapseToc, setCollapseToc] = useState(false);
+  let [collapseToc, setCollapseToc] = useState(true);
   return (
     <div className="flex  flex-col justify-center  bg-gray-50 border border-gray-200 px-2 py-3  text-gray-700 rounded">
       <button
@@ -68,7 +68,7 @@ function TableOfContent({ toc }) {
               "pl-5": item.level == 3,
             });
             return (
-              <a className={aClass} href={item.href}>
+              <a key={item.href} className={aClass} href={item.href}>
                 {item.title}
               </a>
             );
