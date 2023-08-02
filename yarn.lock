@@ -278,6 +278,11 @@
   "resolved" "https://registry.npmjs.org/@types/unist/-/unist-2.0.3.tgz"
   "version" "2.0.3"
 
+"@vercel/analytics@^1.0.1":
+  "integrity" "sha512-Ux0c9qUfkcPqng3vrR0GTrlQdqNJ2JREn/2ydrVuKwM3RtMfF2mWX31Ijqo1opSjNAq6rK76PwtANw6kl6TAow=="
+  "resolved" "https://registry.npmjs.org/@vercel/analytics/-/analytics-1.0.1.tgz"
+  "version" "1.0.1"
+
 "@vercel/og@^0.5.10":
   "integrity" "sha512-Iwo02EZm/MgEMI9MQjuvfdfsTt/IrhH6xGi0EWBnro72LcPKoEDEn/S/fEh8ut3LNMOmrRAjceXEhTfFqQW7sw=="
   "resolved" "https://registry.npmjs.org/@vercel/og/-/og-0.5.10.tgz"
