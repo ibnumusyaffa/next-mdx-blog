@@ -98,7 +98,7 @@ export default function Post({ code, frontmatter, slug, readingTime, toc }) {
           <TableOfContent toc={toc}></TableOfContent>
         ) : null}
 
-        <div className="prose prose-green max-w-full mt-5">
+        <div className="prose prose-purple max-w-full mt-5">
           <MDXComponent
             components={{
               pre: Pre,

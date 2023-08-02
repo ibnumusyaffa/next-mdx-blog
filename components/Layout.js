@@ -9,7 +9,7 @@ function Layout({ children }) {
           <div className="px-5 md:px-0 w-full md:w-[45%]   h-full flex items-center justify-between">
             <Link href="/">
               <di className="flex items-center space-x-3 ">
-                <div className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-blue-600 to-teal-500">
+                <div className="text-2xl lowercase font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-700  to-pink-500">
                   Ibnu.dev
                 </div>
               </di>

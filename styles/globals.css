@@ -6,7 +6,7 @@
 pre {
   @apply md:mx-0 -mx-5;
   font-family: "Jetbrains Mono", monospace !important;
-  background-color: #272822 !important;
+  background-color: #24292e !important;
   border-radius: unset !important;
 }
 
