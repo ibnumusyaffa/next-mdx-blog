@@ -29,7 +29,7 @@ export default function (req) {
           color: paint,
           background:
             mode === "dark"
-              ? "linear-gradient(90deg, #000 0%, #111 100%)"
+              ? "linear-gradient(to right, rgb(17, 24, 39), rgb(88, 28, 135), rgb(124, 58, 237))"
               : "white",
         }}
       >
