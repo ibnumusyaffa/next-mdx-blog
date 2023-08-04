@@ -26,7 +26,7 @@ function Index({ posts }) {
                       {item.date}
                     </span>
                     <span className="flex-1 pr-1"> {item.title}</span>
-                    <span className="text-gray-500  text-xs w-14 ">{item.readingTime.replace("read","")}</span>
+                    <span className="text-gray-500  text-xs w-14 inline-block self-start ">{item.readingTime.replace("read","")}</span>
                   </span>
                 </span>
               </Link>
