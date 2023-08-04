@@ -26,9 +26,15 @@ export default function (req) {
             "linear-gradient(to right, rgb(17, 24, 39), rgb(88, 28, 135), rgb(124, 58, 237))",
         }}
       >
-        <div tw="flex flex-col flex-1 py-10">
+        <div tw="flex flex-col flex-1 pb-10 pt-8">
           <div
-            tw="flex leading-[1.1] text-[80px] font-bold"
+            tw="flex text-4xl text-gray-200"
+            style={{ fontFamily: "Inter", fontWeight: "normal" }}
+          >
+            {searchParams.get("date")}
+          </div>
+          <div
+            tw="flex leading-[1.1] text-[80px] font-bold mt-1"
             style={{
               fontFamily: "Cal Sans",
               fontWeight: "bold",
@@ -41,13 +47,13 @@ export default function (req) {
         </div>
         <div tw="flex items-center w-full justify-between">
           <div
-            tw="flex text-3xl"
+            tw="flex text-4xl text-gray-200"
             style={{ fontFamily: "Inter", fontWeight: "normal" }}
           >
             ibnu.dev
           </div>
           <div
-            tw="flex items-center text-3xl"
+            tw="flex items-center text-4xl text-gray-200"
             style={{ fontFamily: "Inter", fontWeight: "normal" }}
           >
             <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
@@ -66,7 +72,7 @@ export default function (req) {
                 stroke-linejoin="round"
               />
             </svg>
-            <div tw="flex ml-2">github.com/ibnumusyaffa</div>
+            <div tw="flex ml-2 ">github.com/ibnumusyaffa</div>
           </div>
         </div>
       </div>

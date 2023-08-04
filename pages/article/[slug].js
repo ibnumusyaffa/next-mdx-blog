@@ -88,6 +88,7 @@ export default function Post({ code, frontmatter, slug, readingTime, toc }) {
         {...{
           title: frontmatter.title,
           description: frontmatter.description,
+          date: frontmatter.date,
           url: `article/${slug}`,
           thumbnail: frontmatter.thumbnail,
         }}
