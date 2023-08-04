@@ -12,9 +12,9 @@ function Index({ posts }) {
 
       <main className="font-mono m-auto mb-10 text-sm">
         <header className="text-gray-500  flex items-center text-xs">
-          <button className="w-24 h-9 text-left">Date</button>
-          <span className="grow">Title</span>
-          <button className="h-9">Read Time</button>
+          <button className="w-24 h-9 text-left pl-0.5">Date</button>
+          <span className="flex-1">Title</span>
+          <button className="h-9 w-14"></button>
         </header>
         <ul>
           {posts.map((item) => (
@@ -22,11 +22,11 @@ function Index({ posts }) {
               <Link key={item.id} href={`/article/${item.slug}`}>
                 <span className="flex transition-[background-color] hover:bg-gray-100 active:bg-gray-200 border-y border-gray-200 border-b-0">
                   <span className="py-3 flex grow items-center ">
-                    <span className="w-24 inline-block self-start shrink-0 text-gray-500 ">
+                    <span className="w-24 inline-block self-start shrink-0 text-gray-500 pl-0.5">
                       {item.date}
                     </span>
-                    <span className="grow"> {item.title}</span>
-                    <span className="text-gray-500  text-xs">{item.readingTime}</span>
+                    <span className="flex-1 pr-1"> {item.title}</span>
+                    <span className="text-gray-500  text-xs w-14 ">{item.readingTime.replace("read","")}</span>
                   </span>
                 </span>
               </Link>
