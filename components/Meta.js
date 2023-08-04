@@ -7,7 +7,7 @@ function Meta({
   url = "",
 }) {
   url = process.env.NEXT_PUBLIC_URL + url;
-  thumbnail = `${process.env.NEXT_PUBLIC_URL}api/image?title=${title}&cache${Math.floor(Date.now() / 1000)}`;
+  thumbnail = `${process.env.NEXT_PUBLIC_URL}api/image?title=${encodeURIComponent(title)}&cache=${Math.floor(Date.now() / 1000)}`;
   return (
     <Head>
       <title>{title}</title>
