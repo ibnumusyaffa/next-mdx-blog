@@ -7,7 +7,7 @@ function Meta({
   url = "",
 }) {
   url = process.env.NEXT_PUBLIC_URL + url;
-  thumbnail = `${process.env.NEXT_PUBLIC_URL}api/image?title=${title}`;
+  thumbnail = `${process.env.NEXT_PUBLIC_URL}api/image?title=${title}&cache${Math.floor(Date.now() / 1000)}`;
   return (
     <Head>
       <title>{title}</title>
@@ -21,6 +21,8 @@ function Meta({
       <meta property="og:type" content="website" />
       <meta property="og:url" content={url} />
       <meta property="og:title" content={title} />
+      <meta property="og:site_name" content="ibnu.dev"/>
+      <meta name="robots" content="index,follow"/>
       <meta property="og:description"  content={description ? description : ""} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
