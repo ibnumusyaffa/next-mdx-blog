@@ -127,8 +127,8 @@ export default function Post({ code, frontmatter, slug, readingTime, toc }) {
 
 export async function getStaticProps({ params }) {
   let slug = params.slug;
-  let post_path = path.join(process.cwd(), "content", "articles");
-  let post = await getPost(post_path, slug);
+  let postPath = path.join(process.cwd(), "content", "articles");
+  let post = await getPost(postPath, slug);
 
   return {
     props: post,
@@ -136,8 +136,8 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  let post_path = path.join(process.cwd(), "content", "articles");
-  let paths = await getPaths(post_path);
+  let postPath = path.join(process.cwd(), "content", "articles");
+  let paths = await getPaths(postPath);
   return {
     paths,
     fallback: false,

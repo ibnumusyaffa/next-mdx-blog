@@ -10,7 +10,6 @@ class MyDocument extends Document {
     return (
       <Html lang="id">
         <Head>
-          <script async src="https://cdn.splitbee.io/sb.js"></script>
         </Head>
         <body>
           <Main />

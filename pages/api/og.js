@@ -1,23 +1,18 @@
 import { ImageResponse } from "@vercel/og";
 
 export const config = {
-  runtime: 'edge',
+  runtime: "edge",
 };
- 
 
 export default function (req) {
-
-
   const { searchParams } = new URL(req.url);
 
-  const hasTitle = searchParams.has('title');
+  const hasTitle = searchParams.has("title");
   const heading = hasTitle
-      ? searchParams.get('title')?.slice(0, 100)
-      : 'My default title';
+    ? searchParams.get("title")?.slice(0, 100)
+    : "My default title";
 
-
-  const mode = "dark"
-  const paint =  "#fff" 
+  const paint = "#fff";
 
   const fontSize = heading.length > 100 ? "70px" : "90px";
 
@@ -28,14 +23,10 @@ export default function (req) {
         style={{
           color: paint,
           background:
-            mode === "dark"
-              ? "linear-gradient(to right, rgb(17, 24, 39), rgb(88, 28, 135), rgb(124, 58, 237))"
-              : "white",
+            "linear-gradient(to right, rgb(17, 24, 39), rgb(88, 28, 135), rgb(124, 58, 237))",
         }}
       >
-        
         <div tw="flex flex-col flex-1 py-10">
-        
           <div
             tw="flex leading-[1.1] text-[80px] font-bold"
             style={{

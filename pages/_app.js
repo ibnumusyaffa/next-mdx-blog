@@ -9,6 +9,7 @@ import "@fontsource/roboto/500-italic.css";
 
 import "@fontsource/jetbrains-mono/400.css";
 import "@fontsource/jetbrains-mono/400-italic.css";
+
 import { Analytics } from "@vercel/analytics/react";
 import React from "react";
 

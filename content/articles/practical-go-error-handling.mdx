@@ -188,7 +188,8 @@ func NewQueryError(message string, query string) *QueryError {
 func doSomething(level int) error {
 	if level == 1 {
 		return NewQueryError("Some query error", "Select * from blabla")
-    //kita juga bisa membuat error tanpa function constructor, sebagai contohnya
+		
+    //kita juga bisa membuat error tanpa function constructor
     //return  &QueryError{Message: "Some query error", Query: "Select * from blabla"}
 	}
 
