@@ -18,8 +18,8 @@ function Index({ posts }) {
         </header>
         <ul>
           {posts.map((item) => (
-            <li>
-              <Link key={item.id} href={`/article/${item.slug}`}>
+            <li key={item.id}>
+              <Link  href={`/article/${item.slug}`}>
                 <span className="flex transition-[background-color] hover:bg-gray-100 active:bg-gray-200 border-y border-gray-200 border-b-0">
                   <span className="py-3 flex grow items-center ">
                     <span className="w-24 inline-block self-start shrink-0 text-gray-500 pl-0.5">
