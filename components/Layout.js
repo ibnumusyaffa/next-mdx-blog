@@ -8,13 +8,13 @@ function Layout({ children }) {
         <div className="h-20 flex justify-center px-5 md:px-0">
           <div className="w-full md:w-[45%]   h-full flex items-center justify-between">
             <Link href="/">
-              <di className="flex items-center space-x-3  transition-colors text-gray-900 hover:text-purple-700">
+              <di className="flex items-center space-x-3  transition-colors text-purple-700 hover:text-purple-600">
                 <div className="text-xl font-bold">Ibnu.dev</div>
               </di>
             </Link>
             <div>
               <Link href="/about">
-                <di className="flex items-center space-x-3  transition-colors text-gray-700 hover:text-purple-900">
+                <di className="flex items-center space-x-3  transition-colors text-gray-700 hover:text-purple-700 hover:underline font-medium">
                   <div className="text-sm">About</div>
                 </di>
               </Link>

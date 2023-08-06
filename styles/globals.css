@@ -59,6 +59,7 @@ div[data-rehype-pretty-code-title] + div > pre {
   border-top-right-radius: 0 !important;
 }
 
+
 /* styling for <code>  */
 :not(pre) > code::before{
   content: none !important;
@@ -69,15 +70,13 @@ div[data-rehype-pretty-code-title] + div > pre {
 }
 
 
-/* styling <code> without data-languange */
+/* styling inline code without data-languange */
 :not(pre) > code:not([data-language]){
-  @apply px-1 py-0.5 rounded text-sm font-semibold;
-  color: #ec4899 !important;
-  background-color: #f5f5f5;
+  @apply !px-1 !py-0.5 !rounded !text-sm !font-medium !text-purple-600 !bg-purple-50 !border !border-purple-200;
 
 }
 
-/* styling for <code> with data-languange  */
+/* styling inline code with data-languange  */
 
 :not(pre) > code[data-language] {
   @apply px-1 py-0.5 rounded text-sm;
