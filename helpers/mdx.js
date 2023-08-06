@@ -22,10 +22,6 @@ function rehypePrettyCodeWithConf() {
         node.children = [{ type: "text", value: " " }];
       }
     },
-    // Feel free to add classNames that suit your docs
-    onVisitHighlightedLine(node) {
-      node.properties.className.push("highlight");
-    },
     onVisitHighlightedWord(node) {
       node.properties.className = ["word"];
     },

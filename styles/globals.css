@@ -21,34 +21,36 @@ pre > code {
   display: grid;
 }
 
-pre > code > .line::before {
+pre > code > [data-line]::before {
   display: inline-block;
   width: 1rem;
   text-align: right;
+  color: gray;
+  margin-right: 1.25rem;
+}
+
+pre > code[data-line-numbers] > [data-line]::before{
   counter-increment: line;
   content: counter(line);
-  color: gray;
-  margin-right: 1rem;
 }
 
-pre > code > .line {
-  padding-right: 1rem;
-}
 
-pre > code > .highlight {
+
+pre > code > [data-highlighted-line] {
+  @apply border-purple-400;
   margin-left: -1rem;
   margin-right: -1rem;
   padding-left: calc(1rem - 5px);
   border-left-width: 5px;
   background: rgba(200, 200, 255, 0.1);
-  border-color: #60a5fa;
 }
 
 /* styling for title bar  */
 
 div[data-rehype-pretty-code-title] {
-  @apply md:mx-0 -mx-5 md:rounded-t  px-4 py-3 font-mono text-sm font-bold text-gray-200;
-  background-color: #30322a;
+  @apply md:mx-0 -mx-5 md:rounded-t  px-4 py-2 font-mono text-sm font-bold text-gray-200 border border-b border-gray-700;
+  background-color: #24292e !important;
+
 }
 
 div[data-rehype-pretty-code-title] + div > pre {
@@ -80,5 +82,5 @@ div[data-rehype-pretty-code-title] + div > pre {
 :not(pre) > code[data-language] {
   @apply px-1 py-0.5 rounded text-sm;
   font-family: "Jetbrains Mono", monospace;
-  background-color: #272822;
+  background-color: #fff !important;
 }

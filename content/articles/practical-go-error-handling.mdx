@@ -16,7 +16,7 @@ Tidak seperti bahasa pada umumnya seperti Java, Javascript, PHP dll. yang mempun
 
 Perhatikan kode dibawah ini, kode tersebut memanggil function `os.Open` yang akan mengembalikan dua return value, yang pertama adalah `File`, yang kedua adalah `error`, disini kita mengetahui, error digolang hanyalah value pada umumnya.
 
-```go
+```go showLineNumbers
 f, err := os.Open("filename.ext")
 if err != nil {
     //do something with error value
@@ -40,7 +40,7 @@ Di Go, tidak ada keyword `implements`,yang artinya semua type yang mengimplement
 
 Untuk menggunakan built in error di Go, kamu bisa menggunakan 2 package bawaan dari go, package `errors` dan `fmt`
 
-```go
+```go showLineNumbers
 package main
 
 import "errors"
@@ -56,7 +56,7 @@ func divide(a, b int) (int, error) {
 
 gunakan `fmt.Errorf` jika ingin message yang dinamis
 
-```go
+```go showLineNumbers
 package main
 
 import "fmt"
@@ -72,7 +72,7 @@ func divide(a, b int) (int, error) {
 
 dari sisi pemanggil kita bisa mengecek error atau tidak menggunakan kontrol struktur (if, switch)
 
-```go
+```go showLineNumbers
 package main
 
 func main(){
@@ -100,7 +100,7 @@ Beberap point yang penting yang bisa disimpulkan dari kode diatas
 
 ketika menerima sebuah error value, hal paling dasar yang biasa dilakukan adalah mengecek apakah error tersebut `nil` atau tidak, tetapi bagaimana kita menghandle spesifik error tertentu ? daripada menggunakan string untuk menghandle spesifik error, kita bisa menggunakan predefined sentinel `error`.
 
-```go
+```go showLineNumbers
 package main
 
 import (
@@ -161,7 +161,7 @@ Kemudian dari sisi konvensi penulisan sentinel error, disarankan menggunakan pre
 
 pada dasarnya `error` hanyalah sebuah interface di Go, kita bisa membuat custom error type sendiri dengan tambahan informasi yang diinginkan. Berikut adalah contoh dimana kita membuat custom error type dengan tambahan property `Query` didalamnya.
 
-```go
+```go showLineNumbers
 package main
 
 import (
@@ -224,7 +224,7 @@ func main() {
 Di Go 1.13, beberapa APIs baru ditambahkan ke dalam package `errors` dan `fmt` untuk memudahkan pembuatan `error` yang dapat menampung `error` lain.
 contohnya adalah verb `%w` di `fmt.Errorf`. ketika kita menggunaan verb ini `fmt.Errorf("in fileChecker: %w", err)`, error yang telah kita buat akan mempunyai referensi ke error lain yang kita masukkan ke argument `%w`. berikut contoh lengkapnya
 
-```go
+```go showLineNumbers
 package main
 
 import (
@@ -255,7 +255,7 @@ func main() {
 
 ketika code tersebut dirun, akah menghasilkan output sebagai berikut
 
-```sh
+```ansi
 in fileChecker: open not_here.txt: no such file or directory
 open not_here.txt: no such file or directory
 ```
@@ -268,7 +268,7 @@ Pada praktiknya `errors.Unwrap` ini jarang dipakai, karena jika kita mempunyai w
 
 Wrapping errors sangat berguna ketika kita ingin menambahkan ekstra informasi tanpa kehilangan original error yang ada. tapi solusi ini menimbulkan problem ketika error yang diwrapped adalah sentinel error, kita tidak bisa menggunakan operator `== `seperti ini `err == ErrSomething` ketika mengecek sebuah error. Go menyediakan solusinya dari package errors yaitu `errors.Is` yang sudah kita pakai sebelumnya, perhatikan contoh berikut
 
-```go
+```go showLineNumbers
 package main
 
 import (
@@ -308,7 +308,7 @@ ketika code tadi dijalankan akan menghasilkan output `using errors.Is`, dari sin
 
 ketika error yang diwrap adalah custom error type, kita bisa menggunakan `errors.As` untuk mengecek spesifik error tertentu seperti biasa, `errors.As` juga akan masih bekerja jika custom error sudah diwrap beberapa kali dari fungsi ke fungsi.
 
-```go
+```go showLineNumbers
 package main
 
 import (
@@ -357,7 +357,8 @@ func main() {
 
 Kita sudah membahas bagaimana cara menge-wrap suatu error dengan `fmt.Errorf` dan verb `%w`, lalu bagaimana menge-wrap error jika kita menggunakan custom error type ? yang kita perlu lakukan adalah dengan menambah method `Unwrap()` ke custom error type, dan menambah satu property untuk menyimpan referensi error lain, berikut adalah contoh kodenya.
 
-```go
+
+```go showLineNumbers
 package main
 
 import (

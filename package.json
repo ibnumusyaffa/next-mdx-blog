@@ -8,31 +8,31 @@
     "start": "next start"
   },
   "dependencies": {
-    "@fontsource/jetbrains-mono": "^4.5.12",
-    "@fontsource/roboto": "^4.5.8",
-    "@giscus/react": "^2.2.6",
+    "@fontsource/jetbrains-mono": "^5.0.8",
+    "@fontsource/roboto": "^5.0.8",
+    "@giscus/react": "^2.3.0",
     "@vercel/analytics": "^1.0.1",
     "@vercel/og": "^0.5.10",
-    "clsx": "^1.2.1",
-    "date-fns": "^2.29.3",
-    "esbuild": "^0.17.10",
+    "clsx": "^2.0.0",
+    "date-fns": "^2.30.0",
+    "esbuild": "^0.18.18",
     "github-slugger": "^2.0.0",
     "gray-matter": "^4.0.3",
     "mdx-bundler": "^9.2.1",
-    "next": "^13.1.6",
+    "next": "^13.4.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "reading-time": "^1.5.0",
-    "rehype-pretty-code": "^0.9.4",
+    "rehype-pretty-code": "^0.10.0",
     "remark-gfm": "^3.0.1",
     "remark-slug": "^7.0.1",
-    "shiki": "^0.14.1",
-    "unist-util-visit": "^4.1.2"
+    "shiki": "^0.14.3",
+    "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
-    "autoprefixer": "^10.4.13",
-    "postcss": "^8.4.21",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.27",
     "tailwindcss": "^3.3.3"
   }
 }
