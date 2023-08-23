@@ -2,7 +2,7 @@
 date: 2023-08-23
 category: Go
 category_color: blue
-title: "Menggunakan fitur concurency di Go"
+title: "Menggunakan Fitur Concurrency di Go"
 description: ""
 thumbnail: blog/go-gopher.png
 show_thumbnail: true
@@ -11,31 +11,31 @@ is_published: true
 ---
 
 ## Intro
-Salah satu nilai jual dari bahasa Go adalah fitur concurency, fitur ini sering menjadi alasan utama kebanyakan orang memilih Go. Diartikel ini kita akan membahas tool yang tersedia di Go untuk membuat kode yang concurrent, diantara adalah sebagai berikut.
+Salah satu nilai jual dari bahasa Go adalah fitur concurrency, fitur ini sering menjadi alasan utama kebanyakan orang memilih Go. Diartikel ini kita akan membahas tool yang tersedia di Go untuk membuat kode yang concurrent, diantara adalah sebagai berikut.
 
 - **Goroutine**
 - **Channel**
 - **Select**
 - **Package Sync**
 
-## Concurency Vs Paralelisme
+## Concurrency Vs Paralelisme
 
-Go mempunyai fitur concurency secara native, tetapi terkadang ada kesalah-pahaman bahwa concurency dan paralelisme adalah kedua hal yang sama, padahal kedua istilah ini memiliki makna yang berbeda.
+Go mempunyai fitur concurrency secara native, tetapi terkadang ada kesalah-pahaman bahwa concurrency dan paralelisme adalah kedua hal yang sama, padahal kedua istilah ini memiliki makna yang berbeda.
 
-Concurency adalah tentang bagaimana mengatur dan berurusan dengan banyak pekerjaan dalam satu waktu. Apa maksudnya ?
+concurrency adalah tentang bagaimana mengatur dan berurusan dengan banyak pekerjaan dalam satu waktu. Apa maksudnya ?
 
-Pada dasarnya 1 CPU hanya bisa melakukan 1 pekerjaan dalam 1 waktu, sebagai contoh jika kita membuka banyak program sekaligus diperangkat yang memiliki 1 CPU, secara sederhana CPU tersebut akan berpindah-pindah (context switch) dengan cepat antara program 1 dengan program yang lain. hal ini menciptkan sebuah ilusi seolah-olah 1 CPU tersebut melakukan banyak pekerjaan secara sekaligus, padahal kenyataanya tidak. inilah yang disebut Concurency.
+Pada dasarnya 1 CPU hanya bisa melakukan 1 pekerjaan dalam 1 waktu, sebagai contoh jika kita membuka banyak program sekaligus diperangkat yang memiliki 1 CPU, secara sederhana CPU tersebut akan berpindah-pindah (context switch) dengan cepat antara program 1 dengan program yang lain. hal ini menciptkan sebuah ilusi seolah-olah 1 CPU tersebut melakukan banyak pekerjaan secara sekaligus, padahal kenyataanya tidak. inilah yang disebut concurrency.
 
 Dilain itu, paralel adalah beberapa pekerjaan dikerjakan secara bersamaan, ini mengharuskan perangkat yang digunakan mempunyai lebih dari 1 CPU. 
 
 Kode yang didesain concurrent bisa saja berjalan secara paralel (dilingkungan multi CPU), tetapi hal ini bukanlah keharusan.
 
-Di Go, kita bisa menggunakan **Goroutine** untuk membuat program yang bersifat concurrent, fitur tersebut diharapkan membuat program yang kita buat menjadi lebih efektif, baik dilingkungan **single CPU** ataupun **multi CPU**. Tetapi yang perlu diingat adalah, menggunakan fitur concurency bukan berarti program yang kita buat otomatis menjadi lebih cepat, ini sangat bergantung dari algoritma yang dibuat dan jumlah core yang dimiliki.
+Di Go, kita bisa menggunakan **Goroutine** untuk membuat program yang bersifat concurrent, fitur tersebut diharapkan membuat program yang kita buat menjadi lebih efektif, baik dilingkungan **single CPU** ataupun **multi CPU**. Tetapi yang perlu diingat adalah, menggunakan fitur concurrency bukan berarti program yang kita buat otomatis menjadi lebih cepat, ini sangat bergantung dari algoritma yang dibuat dan jumlah core yang dimiliki.
 
 
 ## Apa itu Goroutine ?
 
-Dibeberapa bahasa pemrograman kita bisa menggunakan OS threads (thread pada level sistem operasi) secara langsung untuk melakukan pekerjaan secara paralel, tetapi hal tersebut tidak terlalu efisien dari sisi performa dan memori karena perlunya berkomunikasi dengan resource dilevel sistem operasi. hal ini menjadi salah satu alasan utama dibuatnya fitur concurency secara native didalam bahasa Go.
+Dibeberapa bahasa pemrograman kita bisa menggunakan OS threads (thread pada level sistem operasi) secara langsung untuk melakukan pekerjaan secara paralel, tetapi hal tersebut tidak terlalu efisien dari sisi performa dan memori karena perlunya berkomunikasi dengan resource dilevel sistem operasi. hal ini menjadi salah satu alasan utama dibuatnya fitur concurrency secara native didalam bahasa Go.
 
 Goroutine adalah sebuah function yang dieksekusi secara independen dan dapat berjalan secara bersamaan (concurrent) dengan function lainnya. Goroutine ini mirip thread, bedanya goroutine dimanage oleh Go runtime, sedangkan thread dimanage oleh sistem operasi, hal ini yang membuat goroutine menjadi lebih ringan dan efisien. 1 Goroutine hanya memakan memori beberapa kilobyte saja, secara teknis membuat puluhan ribu goroutine bukanlah sebuah masalah.
 
@@ -653,8 +653,8 @@ setelah kita menambah `sync.Mutex` ke counter tersebut dan menggunakan `Lock()` 
 
 ## Penutup
 
-Setelah memahami dasar-dasar concurency di Go yaitu goroutine, channel, select, dan sync package, diharapkan kita dapat membuat program yang lebih efektif dilingkungan multi CPU.
+Setelah memahami dasar-dasar concurrency di Go yaitu goroutine, channel, select, dan sync package, diharapkan kita dapat membuat program yang lebih efektif dilingkungan multi CPU.
 
-Langkah berikutnya kamu juga bisa mempelajari pola atau pattern concurency yang lebih canggih, berikut salah satu contoh linknya [github.com/lotusirous/go-concurrency-patterns](https://github.com/lotusirous/go-concurrency-patterns)
+Langkah berikutnya kamu juga bisa mempelajari pola atau pattern concurrency yang lebih canggih, berikut salah satu contoh linknya [github.com/lotusirous/go-concurrency-patterns](https://github.com/lotusirous/go-concurrency-patterns)
 
 Semoga membantu.
