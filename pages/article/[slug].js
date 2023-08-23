@@ -118,7 +118,6 @@ export default function Post({ code, frontmatter, slug, readingTime, toc }) {
         inputPosition="top"
         theme="light"
         lang="en"
-        loading="lazy"
         crossorigin="anonymous"
         async
       ></Giscus>

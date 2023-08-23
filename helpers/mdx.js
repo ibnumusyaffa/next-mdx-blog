@@ -10,7 +10,7 @@ import GithubSlugger from "github-slugger";
 import rehypePrettyCode from "rehype-pretty-code";
 
 const { readdir, readFile, lstat } = fs.promises;
-const slugger = new GithubSlugger();
+
 
 function rehypePrettyCodeWithConf() {
   const options = {
@@ -107,17 +107,22 @@ export async function getPost(postPath, slug) {
 
   let { content } = matter(source);
   let readStat = readingTime(content);
+
+  const slugger = new GithubSlugger();
   const toc = content
     .split("\n")
     .filter((line) => line.match(/^#{1,3}\s/)) // only match level 1-3
     .map((line) => {
       const [level, title] = line.split(/(?<=#)\s/); // split on first space
+
       return {
         level: level.length,
         title,
         href: "#" + slugger.slug(title),
       };
     });
+
+  // console.log(toc);
 
   return {
     slug,
