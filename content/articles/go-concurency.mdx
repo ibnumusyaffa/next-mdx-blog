@@ -79,7 +79,7 @@ Main goroutine finished
 ```
 dilihat dari output diatas, bisa diketahui bahwa program yang baru saja kita jalankan langsung exit begitu saja, padahal kita menjalankan 2 function `count` dengan goroutine yang membutuhkan waktu sekitar 3 detik, hal ini karena jika goroutine utama berakhir (function `main`), maka program akan keluar dan goroutine yang berjalan dibackground akan terhenti. mari kita ubah kode diatas menjadi sebagai berikut
 
-```go
+```go showLineNumbers
 package main
 
 import (
@@ -173,14 +173,14 @@ Pada kode diatas operasi menerima pesan `<-msgChannel` akan bersifat blocking, s
 ### For-range dan channel
 untuk menerima message dari channel kita juga bisa menggunakan keyword ```for```, terutama jika message yang dikirim berulang-kali dalam 1 channel
 
-```go
+```go showLineNumbers
 for v := range ch {
     fmt.Println(v)
 }
 ```
 berikut contoh lengkap penggunaan `for` dengan channel 
 
-```go 
+```go showLineNumbers
 package main
 
 import (
@@ -326,7 +326,7 @@ kode tersebut menjadi blocking/deadlock kembali karena pada line 11 kita mengiri
 ## Select
 Ada kalanya ketika kita membuat program dengan Go, kita menggunakan banyak channel untuk berkomunikasi dengan banyak goroutine.
 
-```go 
+```go showLineNumbers
 package main
 
 import (
@@ -360,7 +360,7 @@ gorutine 2 selesai dalam waktu 1 detik
 ```
 hal yang kurang sesuai dari program diatas adalah meskipun **goroutine 2** selesai lebih awal kita tidak bisa menggunakan pesan dari **goroutine 2** sebelum **goroutine 1** selesai, hal ini bisa menjadi bottleneck yang cukup mengganggu, dari masalah tersebut kita bisa menggunakan `select` keyword.
 
-```go
+```go showLineNumbers
 package main
 
 import (
@@ -399,7 +399,7 @@ dari contoh diatas kita bisa menggunakan keyword select untuk menunggu pesan dar
 
 Agar dapat memproses pesan dari channel selanjutnya kita juga bisa bisa menggunakan for-loop seperti berikut
 
-```go
+```go showLineNumbers
 package main
 
 import (
@@ -441,7 +441,7 @@ gorutine 1 selesai dalam waktu 3 detik
 ```
 layaknya `switch` kita juga bisa menggunakan default case jika tidak ada channel yang mengirim message dalam suatu waktu
 
-```go 
+```go showLineNumbers
 package main
 
 import (
@@ -493,7 +493,7 @@ Package sync ini mempunyai beberapa fungsi, namun kali ini kita akan membahasan 
 ### sync.WaitGroup
 `sync.WaitGroup` ini sangat cocok ketika kita ingin menunggu beberapa goroutine sekaligus sampai selesai. Berikut contohnya
 
-```go
+```go showLineNumbers
 package main
 
 import (
@@ -549,7 +549,7 @@ Pada dasarnya `sync.WaitGroup` adalah sebuah counter, ketika kita menjalankan se
 ### sync.Mutex
 Ketika kita memiliki sebuah data yang bisa diakses dan dimodikasi oleh banyak goroutine secara bersamaan, hal ini dapat memunculkan masalah. perhatikan kode dibawah
 
-```go 
+```go showLineNumbers
 package main
 
 import (
@@ -599,7 +599,7 @@ Misalnya, jika dua goroutine membaca nilai `v` pada saat yang sama (misalnya `v`
 
 Dari kasus diatas maka diperlukanlah mekanisme locking, dimana dalam 1 waktu hanya 1 gorutine yang boleh melakukan increment,  di Go kita bisa menggunakan sync.Mutex. Mari kita coba ubah kode counter tadi menjadi **concurrent safe**
 
-```go 
+```go showLineNumbers
 package main
 
 import (
