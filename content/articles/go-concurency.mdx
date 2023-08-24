@@ -26,7 +26,11 @@ concurrency adalah tentang bagaimana mengatur dan berurusan dengan banyak pekerj
 
 Pada dasarnya 1 CPU hanya bisa melakukan 1 pekerjaan dalam 1 waktu, sebagai contoh jika kita membuka banyak program sekaligus diperangkat yang memiliki 1 CPU, secara sederhana CPU tersebut akan berpindah-pindah (context switch) dengan cepat antara program 1 dengan program yang lain. hal ini menciptkan sebuah ilusi seolah-olah 1 CPU tersebut melakukan banyak pekerjaan secara sekaligus, padahal kenyataanya tidak. inilah yang disebut concurrency.
 
+![Concurrency](/blog/concurrency.png)
+
 Dilain itu, paralel adalah beberapa pekerjaan dikerjakan secara bersamaan, ini mengharuskan perangkat yang digunakan mempunyai lebih dari 1 CPU. 
+
+![Paralel](/blog/paralel.png)
 
 Kode yang didesain concurrent bisa saja berjalan secara paralel (dilingkungan multi CPU), tetapi hal ini bukanlah keharusan.
 
