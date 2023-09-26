@@ -10,6 +10,27 @@ show_toc: true
 is_published: false
 ---
 
-main usage of context cancelation & propagation and send value
+Didunia pemrograman, kadang kita berhadapan dengan situasi dimana kita mengeksekusi function yang mungkin saja memerlukan waktu lama atau perlu dihentikan karena alasan tertentu. dibahasa Go hal ini bisa diatasi dengan package `context`. package context ini berfungsi untuk melakukan cancelation dan propagation, apa maksudnya?
+
+sebagai contoh, ketika kita mengeksekusi function `a`, function `a` tersebut memanggil `b`, dan `b` memanggil `c`. 
+
+kita bisa membatalkan (cancel) eksekusi di function a menggunakan mekanisme context, pembatalan tersebut juga akan merambat ke function b dan c, inilah yang disebut propagation dalam Go. 
+
+Dengan menggunakan context, kita bisa memastikan bahwa saat sebuah tugas dihentikan, semua tugas turunannya yang terkait juga akan dihentikan, sehingga menghindari eksekusi yang tidak perlu dan menghindari resource yang terbuang.
+
+Context merupakan package yang bisa menyimpan dan membawa suatu data value, sinyal timeout dan sinyal deadline.
+
+Context juga merupakan object yang immutable, yang mana setelah context dibuat maka tidak akan bisa diubah lagi. Jadi jika kita akan menambah atau merubah context maka secara otomatis context tersebut akan membuat child baru bukan merubah context tersebut.
+
+https://go.dev/talks/2014/gotham-context.slide#21
+
+
+The problems context plans to solve are：
+
+Let’s say that you started a function and you need to pass some common parameters to the downstream functions. You cannot pass these common parameters each as an argument to all the downstream functions.
+You started a goroutine which in turn start more goroutines and so on. Suppose the task that you were doing is no longer needed. Then how to inform all child goroutines to gracefully exit so that resources can be freed up
+A task should be finished within a specified timeout of say 2 seconds. If not it should gracefully exit or return.
+A task should be finished within a deadline eg it should end before 5 pm . If not finished then it should gracefully exit and return
+
 
 # Context
