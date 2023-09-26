@@ -7,11 +7,49 @@ import Tag from "../../components/Tag";
 import Image from "next/image";
 import { getPaths, getPost } from "../../helpers/mdx";
 import clsx from "clsx";
-import { useState } from "react";
-import ArrowRight from "../../components/icons/ArrowRight";
-import ArrowDown from "../../components/icons/ArrowDown";
+
 import Meta from "../../components/Meta";
 import Giscus from "@giscus/react";
+
+const useIntersectionObserver = (setActiveId) => {
+  const headingElementsRef = React.useRef({});
+  React.useEffect(() => {
+    const callback = (headings) => {
+      headingElementsRef.current = headings.reduce((map, headingElement) => {
+        map[headingElement.target.id] = headingElement;
+        return map;
+      }, headingElementsRef.current);
+
+      const visibleHeadings = [];
+      Object.keys(headingElementsRef.current).forEach((key) => {
+        const headingElement = headingElementsRef.current[key];
+        if (headingElement.isIntersecting) visibleHeadings.push(headingElement);
+      });
+
+      const getIndexFromId = (id) =>
+        headingElements.findIndex((heading) => heading.id === id);
+
+      if (visibleHeadings.length === 1) {
+        setActiveId(visibleHeadings[0].target.id);
+      } else if (visibleHeadings.length > 1) {
+        const sortedVisibleHeadings = visibleHeadings.sort(
+          (a, b) => getIndexFromId(a.target.id) > getIndexFromId(b.target.id)
+        );
+        setActiveId(sortedVisibleHeadings[0].target.id);
+      }
+    };
+
+    const observer = new IntersectionObserver(callback, {
+      rootMargin: "0px 0px -40% 0px",
+    });
+
+    const headingElements = Array.from(document.querySelectorAll("h2, h3"));
+
+    headingElements.forEach((element) => observer.observe(element));
+
+    return () => observer.disconnect();
+  }, [setActiveId]);
+};
 
 function Header({ frontmatter, readingTime }) {
   return (
@@ -47,38 +85,74 @@ function Header({ frontmatter, readingTime }) {
 }
 
 function TableOfContent({ toc }) {
-  let [collapseToc, setCollapseToc] = useState(true);
+  const [activeId, setActiveId] = React.useState();
+  useIntersectionObserver(setActiveId);
   return (
-    <div className="flex  flex-col justify-center  bg-gray-50 border border-gray-200 px-2 py-3  text-gray-700 rounded">
-      <button
-        onClick={() => setCollapseToc((prev) => !prev)}
-        className="font-semibold uppercase focus:outline-none"
-      >
-        <div className="flex items-center">
-          {collapseToc ? <ArrowDown></ArrowDown> : <ArrowRight></ArrowRight>}
-
-          <div className="pl-1">Daftar Isi</div>
-        </div>
-      </button>
-      {collapseToc ? (
-        <div className="mt-2 space-y-1 pl-6">
-          {toc.map((item) => {
-            let aClass = clsx("block hover:underline", {
-              "pl-0": item.level == 2,
-              "pl-5": item.level == 3,
-            });
-            return (
-              <a key={item.href} className={aClass} href={item.href}>
-                {item.title}
-              </a>
-            );
-          })}
-        </div>
-      ) : null}
+    <div className="flex flex-col justify-center pr-5 py-1.5  ">
+      <div className="font-semibold mb-1.5 text-gray-800 uppercase">
+        Daftar Isi
+      </div>
+      <div className="space-y-2">
+        {toc.map((item) => {
+          const isActive = item.href === `#${activeId}`;
+          return (
+            <a
+              key={item.href}
+              className={clsx("block hover:underline text-sm ", {
+                "pl-0": item.level == 2,
+                "pl-5": item.level == 3,
+                "text-purple-700 font-medium": isActive,
+                "text-gray-600": !isActive,
+              })}
+              href={item.href}
+              onClick={(e) => {
+                e.preventDefault();
+                document.querySelector(item.href).scrollIntoView({
+                  behavior: "smooth",
+                });
+              }}
+            >
+              {item.title}
+            </a>
+          );
+        })}
+      </div>
     </div>
   );
 }
 
+function TableOfContentMobile({ toc }) {
+  return (
+    <div className="flex flex-col justify-center p-5 ">
+      <div className="font-semibold mb-1.5 text-gray-800 uppercase">
+        Daftar Isi
+      </div>
+      <div className="space-y-2">
+        {toc.map((item) => {
+
+          return (
+            <a
+              key={item.href}
+              className={clsx("block hover:underline  text-gray-700 ", {
+                "pl-0": item.level == 2,
+                "pl-5": item.level == 3,
+              })}
+              href={item.href}
+              onClick={(e) => {
+                e.preventDefault();
+                document.querySelector(item.href).scrollIntoView({
+                  behavior: "smooth",
+                });
+              }}
+            >
+              {item.title}
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 export default function Post({ code, frontmatter, slug, readingTime, toc }) {
   let MDXComponent = React.useMemo(() => getMDXComponent(code), [code]);
 
@@ -94,33 +168,57 @@ export default function Post({ code, frontmatter, slug, readingTime, toc }) {
         }}
       ></Meta>
       <article className="mb-10">
-        <Header frontmatter={frontmatter} readingTime={readingTime}></Header>
-        {frontmatter.show_toc ? (
-          <TableOfContent toc={toc}></TableOfContent>
-        ) : null}
+        <div className="flex justify-center">
+          <div className="md:w-[45%] w-full">
+            <Header
+              frontmatter={frontmatter}
+              readingTime={readingTime}
+            ></Header>
+          </div>
+        </div>
 
-        <div className="prose prose-purple max-w-full mt-5">
-          <MDXComponent
-            components={{
-              pre: Pre,
-            }}
-          />
+        <div className="relative flex justify-center">
+          {frontmatter.show_toc ? (
+            <div className="absolute top-10  left-5 h-full hidden md:block">
+              <div className="sticky top-5 border-r border-gray-300">
+                <TableOfContent toc={toc}></TableOfContent>
+              </div>
+            </div>
+          ) : null}
+          <div className="md:w-[45%] w-full">
+            {frontmatter.show_toc ? (
+              <div className="border border-gray-200 md:hidden bg-gray-50 rounded">
+                <TableOfContentMobile toc={toc}></TableOfContentMobile>
+              </div>
+            ) : null}
+            <div className="prose prose-purple max-w-full mt-5">
+              <MDXComponent
+                components={{
+                  pre: Pre,
+                }}
+              />
+            </div>
+          </div>
         </div>
       </article>
-      <Giscus
-        repo="ibnumusyaffa/ibnu.dev"
-        repoId="MDEwOlJlcG9zaXRvcnkzNjMwMjEwNzk="
-        category="General"
-        categoryId="DIC_kwDOFaNDF84CO_nG"
-        mapping="pathname"
-        reactionsEnabled="1"
-        emitMetadata="0"
-        inputPosition="top"
-        theme="light"
-        lang="en"
-        crossorigin="anonymous"
-        async
-      ></Giscus>
+      <div className="flex justify-center">
+        <div className="md:w-[45%] w-full">
+          <Giscus
+            repo="ibnumusyaffa/ibnu.dev"
+            repoId="MDEwOlJlcG9zaXRvcnkzNjMwMjEwNzk="
+            category="General"
+            categoryId="DIC_kwDOFaNDF84CO_nG"
+            mapping="pathname"
+            reactionsEnabled="1"
+            emitMetadata="0"
+            inputPosition="top"
+            theme="light"
+            lang="en"
+            crossorigin="anonymous"
+            async
+          ></Giscus>
+        </div>
+      </div>
     </Layout>
   );
 }

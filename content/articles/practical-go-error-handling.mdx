@@ -4,8 +4,8 @@ category: Go
 category_color: blue
 title: "Panduan Ringkas Error Handling di Go"
 description: ""
-thumbnail: blog/js.jpg
-show_thumbnail: false
+thumbnail: blog/go-gopher.png
+show_thumbnail: true
 show_toc: true
 is_published: true
 ---
@@ -96,7 +96,7 @@ Beberap point yang penting yang bisa disimpulkan dari kode diatas
 - Gunakan lowercase untuk error message
 - Gunakan variable name `_`, untuk mengatakan secara explicit bahwa kita mengabaikan sebuah error secara sengaja
 
-## Menangani spesifik error dengan Sentinel error
+## Handle spesifik error dengan Sentinel error
 
 ketika menerima sebuah error value, hal paling dasar yang biasa dilakukan adalah mengecek apakah error tersebut `nil` atau tidak, tetapi bagaimana kita menghandle spesifik error tertentu ? daripada menggunakan string untuk menghandle spesifik error, kita bisa menggunakan predefined sentinel `error`.
 
@@ -157,7 +157,7 @@ kita bisa menggunakan operator perbandingan `err == ErrLevel1` atau yang lebih d
 
 Kemudian dari sisi konvensi penulisan sentinel error, disarankan menggunakan prefix `Err` semisal `ErrSomething` , `ErrInvalid`, `ErrFileNotExist`
 
-## Menambahkan ekstra informasi dengan custom error type
+## Extra informasi dengan custom error type
 
 pada dasarnya `error` hanyalah sebuah interface di Go, kita bisa membuat custom error type sendiri dengan tambahan informasi yang diinginkan. Berikut adalah contoh dimana kita membuat custom error type dengan tambahan property `Query` didalamnya.
 
@@ -264,7 +264,7 @@ Pada line **22** kita bisa meng-unwrap error dengan method `errors.Unwrap(err)`,
 
 Pada praktiknya `errors.Unwrap` ini jarang dipakai, karena jika kita mempunyai wrapped error yang bertingkat akan menyulitkan jika harus meng-unwrap berulang-kali, maka dari itu, lebih disarankan menggunakan `errors.Is` atau `errors.As` jika ingin mengecek suatu **error chain** mempunya spesifik error tertentu
 
-### Mengecek wrapped sentinel error dengan errors.Is
+### Handle wrapped sentinel error dengan errors.Is
 
 Wrapping errors sangat berguna ketika kita ingin menambahkan ekstra informasi tanpa kehilangan original error yang ada. tapi solusi ini menimbulkan problem ketika error yang diwrapped adalah sentinel error, kita tidak bisa menggunakan operator `== `seperti ini `err == ErrSomething` ketika mengecek sebuah error. Go menyediakan solusinya dari package errors yaitu `errors.Is` yang sudah kita pakai sebelumnya, perhatikan contoh berikut
 
@@ -304,7 +304,7 @@ func main() {
 
 ketika code tadi dijalankan akan menghasilkan output `using errors.Is`, dari sini kita bisa mengetahui, meskipun error tersebut sudah diwrap, kita masih bisa mengetahui error tersebut adalah error `os.ErrNotExist`. `errors.Is` juga masih bekerja ketika kita punya error yang sudah diwrap beberapa kali
 
-### Mengecek wrapped custom error dengan errors.As
+### Handle wrapped custom error dengan errors.As
 
 ketika error yang diwrap adalah custom error type, kita bisa menggunakan `errors.As` untuk mengecek spesifik error tertentu seperti biasa, `errors.As` juga akan masih bekerja jika custom error sudah diwrap beberapa kali dari fungsi ke fungsi.
 

@@ -29,12 +29,17 @@ function Layout({ children }) {
           minHeight: "calc(100vh - 9rem)",
         }}
       >
-        <main className="w-full md:w-[45%] ">{children}</main>
+        <main className="w-full">{children}</main>
       </div>
       <footer className="flex justify-center">
         <div className="px-5 md:px-0 w-full md:w-[45%] text-gray-600 flex justify-between text-sm py-5">
           <div>© Ibnu Musyaffa</div>
-          <a href="https://github.com/ibnumusyaffa/ibnu.dev" className="underline">Source</a>
+          <a
+            href="https://github.com/ibnumusyaffa/ibnu.dev"
+            className="underline"
+          >
+            Source
+          </a>
         </div>
       </footer>
     </React.Fragment>
