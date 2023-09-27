@@ -88,7 +88,7 @@ function TableOfContent({ toc }) {
   const [activeId, setActiveId] = React.useState();
   useIntersectionObserver(setActiveId);
   return (
-    <div className="flex flex-col justify-center pr-5 py-1.5  ">
+    <div className="flex flex-col justify-center  ">
       <div className="font-semibold mb-1.5 text-gray-800 uppercase">
         Daftar Isi
       </div>
@@ -129,7 +129,6 @@ function TableOfContentMobile({ toc }) {
       </div>
       <div className="space-y-2">
         {toc.map((item) => {
-
           return (
             <a
               key={item.href}
@@ -177,13 +176,9 @@ export default function Post({ code, frontmatter, slug, readingTime, toc }) {
           </div>
         </div>
 
-        <div className="relative flex justify-center">
+        <div className="relative flex justify-center w-full ">
           {frontmatter.show_toc ? (
-            <div className="absolute top-10  left-5 h-full hidden md:block">
-              <div className="sticky top-5 border-r border-gray-300">
-                <TableOfContent toc={toc}></TableOfContent>
-              </div>
-            </div>
+            <div className="hidden md:block  w-full"></div>
           ) : null}
           <div className="md:w-[45%] w-full">
             {frontmatter.show_toc ? (
@@ -197,6 +192,14 @@ export default function Post({ code, frontmatter, slug, readingTime, toc }) {
                   pre: Pre,
                 }}
               />
+            </div>
+          </div>
+          <div className="w-full hidden md:block ">
+            <div
+              className="fixed top-[50%]  border-gray-200 ml-10 pl-5 py-1.5 border-l "
+              style={{ transform: "translate(0, -50%)" }}
+            >
+              <TableOfContent toc={toc}></TableOfContent>
             </div>
           </div>
         </div>
