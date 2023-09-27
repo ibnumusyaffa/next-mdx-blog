@@ -167,20 +167,15 @@ export default function Post({ code, frontmatter, slug, readingTime, toc }) {
         }}
       ></Meta>
       <article className="mb-10">
-        <div className="flex justify-center">
+        <div className="relative flex justify-center w-full ">
+          {frontmatter.show_toc ? (
+            <div className="hidden md:block w-full"></div>
+          ) : null}
           <div className="md:w-[45%] w-full">
             <Header
               frontmatter={frontmatter}
               readingTime={readingTime}
             ></Header>
-          </div>
-        </div>
-
-        <div className="relative flex justify-center w-full ">
-          {frontmatter.show_toc ? (
-            <div className="hidden md:block  w-full"></div>
-          ) : null}
-          <div className="md:w-[45%] w-full">
             {frontmatter.show_toc ? (
               <div className="border border-gray-200 md:hidden bg-gray-50 rounded">
                 <TableOfContentMobile toc={toc}></TableOfContentMobile>
@@ -196,7 +191,7 @@ export default function Post({ code, frontmatter, slug, readingTime, toc }) {
           </div>
           <div className="w-full hidden md:block ">
             <div
-              className="fixed top-[50%]  border-gray-200 ml-10 pl-5 py-1.5 border-l "
+              className="sticky top-[50%]  border-gray-200 ml-12 pl-5 py-1.5 border-l "
               style={{ transform: "translate(0, -50%)" }}
             >
               <TableOfContent toc={toc}></TableOfContent>
