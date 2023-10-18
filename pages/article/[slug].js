@@ -171,7 +171,7 @@ export default function Post({ code, frontmatter, slug, readingTime, toc }) {
           {frontmatter.show_toc ? (
             <div className="hidden md:block flex-1"></div>
           ) : null}
-          <div className="md:w-[45%] ">
+          <div className="md:w-[45%] w-full">
             <Header
               frontmatter={frontmatter}
               readingTime={readingTime}
