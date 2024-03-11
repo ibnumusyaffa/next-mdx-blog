@@ -1,0 +1,40 @@
+---
+date: 2021-05-14
+category: Javascript
+category_color: yellow
+title: "Limit Promise.all concurrency dengan p-limit"
+description: null
+thumbnail: blog/js.jpg
+show_thumbnail: true
+show_toc: false
+is_published: true
+---
+
+Sebagai pengguna javascript, mayoritas dari kita pasti tau, Javascript mempunyai API untuk menghandle multiple promises dengan `Promise.all`
+
+```javascript
+const [result1, result2] = await Promise.all([
+  fetch("http://example.com/1"),
+  fetch("http://example.com/2"),
+]);
+```
+
+`Promise.all` ini sangat berguna ketika kita ingin mengeksekusi banyak async function/promises, tapi dari sini muncul pertanyaan bagaimana caranya me-limit concurrency agar hanya dieksekusi sebanyak `n` saja dalam setiap waktu ?
+
+```javascript
+const urls = [
+  "https://example.com/api/data1",
+  "https://example.com/api/data2",
+  // Add more URLs as needed
+];
+
+const responses = await Promise.all(
+  urls.map((url) => fetch(url))
+);
+```
+Perhatikan kode ditas, jika kita mempunya 100 url, semua url tersebut akan direquest secara concurrent dalam 1 waktu, ini bukanlah masalah jika url tersebut masih sedikit, tetapi bisa jadi masalah jika kita url tersebut banyak semisal 10.000 keatas.
+
+
+## Limit concurrency dengan p-limit
+
+untuk melimit concurrency Promise.all, kita bisa menggunakan package yang bernama `p-limit`        
