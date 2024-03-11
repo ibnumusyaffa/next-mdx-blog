@@ -4,8 +4,8 @@ category: Go
 category_color: blue
 title: "Mengenal Package Context di Go"
 description: ""
-thumbnail: blog/js.jpg
-show_thumbnail: false
+thumbnail: blog/beaver.jpg
+show_thumbnail: true
 show_toc: true
 is_published: true
 ---
@@ -14,28 +14,37 @@ is_published: true
 
 ## Intro
 
-Ketika menggunakan HTTP server di Go, kita menghandle HTTP request tersebut dengan sebuah function/handler yang mempunyai goroutine sendiri, kemudian http request tersebut bisa saja mengeksekusi function lain (baik di goroutine yang sama atau goroutine tambahan) misalnya untuk mengakses database, file, service lain dll.
+Ketika menggunakan HTTP server di Go, kita menghandle HTTP request tersebut dengan sebuah **function/handler** yang mempunyai goroutine sendiri.  
+
+HTTP request tersebut bisa saja mengeksekusi function lain (baik di goroutine yang sama atau goroutine tambahan) misalnya untuk mengakses database, file dll.
+
 Hal ini bisa digambarkan menjadi seperti berikut.
 
-HTTP request -> function handleReport() -> function getReportFromDB()
+**HTTP request -> function handleReport() -> function getReportFromDB()**
 
-Jika diasumsikan endpoint HTTP api tersebut membutuhkan waktu 10 detik, apa yang terjadi jika user membatalkan HTTP request tersebut di detik ke 3 ? bagaimana caranya kita membatalkan (cancelation) process di function `handleReport()` dan turunannya (propagation) function `getReportFromDB()` ? Dari kasus tersebut, Go menyediakan package context yang sudah built in di standard library.
+Jika diasumsikan endpoint HTTP api tersebut membutuhkan waktu 10 detik, apa yang terjadi jika user membatalkan HTTP request tersebut di detik ke 3 ? bagaimana caranya kita membatalkan (cancelation) process di function `handleReport()` dan turunannya (propagation) function `getReportFromDB()` ? 
+
+Dari kasus tersebut, Go menyediakan package context yang sudah built in di standard library.
 
 
 ## Apa itu Context
 
-Context adalah package di standard library Go yang menyediakan mekanisme untuk mengatur cancellation, timeout/deadline,  sekaligus values yang bersifat request scoped. context direpresantikan dengan type signature berikut
+Context adalah package di standard library Go yang menyediakan mekanisme untuk mengatur cancellation, timeout/deadline,  sekaligus values yang bersifat request scoped. context direpresantikan dengan type signature berikut.
 
 ```go
 type Context interface {
-	// Deadline akan mengembalikan waktu kapan suatu context akan dicancel, jika ada
-	Deadline() (deadline time.Time, ok bool)
-	// Done akan mengembalikan suatu channel sebagai penanda context sudah dicancel
-	Done() <-chan struct{}
-	// Mengembalikan error kenapa suatu context dicancel/dibatalkan
-	Err() error
-	// Mengambil suatu value berdasarkan key
-	Value(key any) any
+  // Deadline akan mengembalikan waktu kapan suatu context akan dicancel
+  Deadline() (deadline time.Time, ok bool)
+
+  // Done akan mengembalikan suatu channel 
+  // sebagai penanda context sudah dicancel
+  Done() <-chan struct{}
+
+  // Mengembalikan error kenapa suatu context dicancel/dibatalkan
+  Err() error
+
+  // Mengambil suatu value berdasarkan key
+  Value(key any) any
 }
 ```
 
@@ -60,7 +69,9 @@ func main() {
 
 ## Context dengan values
 
-Untuk menambah sebuah key & value kedalam sebuah context, kita bisa menggunakan function `context.WithValue(parent context.Context, key any, val any) `, berikut contoh kodenya.
+Untuk menambah sebuah key & value kedalam sebuah context, kita bisa menggunakan function `context.WithValue(parent context.Context, key any, val any) `. 
+
+Berikut contoh kodenya
 
 ```go showLineNumbers
 package main
@@ -110,14 +121,17 @@ func performTask(ctx context.Context) {
 
 ```
 
-- Context bersifat immutable, sehingga context.withValue akan meng-copy parent context sebelumnya dan mereturn context baru dengan tambahan value baru
-- Karena bersifat immutable context parent tidak akan mengalami perubahan
-- Untuk menarik data berdasarkan key dari context kita bisa menggunakan `context.Value(key)`
-- By default return `context.Value` mempunya type `any` (tidak type safe), kita bisa meng-convertnya menggunakan type assertion dan comma-ok idiom untuk memastikan type assertionya berhasil
+Context bersifat immutable, sehingga `context.withValue` akan meng-copy parent context sebelumnya dan mereturn context baru dengan tambahan value baru
+
+Karena bersifat immutable context parent tidak akan mengalami perubahan
+
+Untuk menarik data berdasarkan key dari context kita bisa menggunakan `context.Value(key)`
+
+By default return `context.Value` mempunya type `any` (tidak type safe), kita bisa meng-convertnya menggunakan type assertion dan comma-ok idiom untuk memastikan type assertionya berhasil
 
 ## Context dengan Timeout
 
-Untuk membuat context dengan informasi timeout didalamnya, kita bisa menggunakan method `context.WithTimeout(parent Context, timeout time.Duration)` dimana paramater pertama adalah parent context, dan paramater kedua adalah durasi timeout dengan type data `time.Duration`
+Untuk membuat context dengan informasi timeout didalamnya, kita bisa menggunakan method `context.WithTimeout()`, dimana paramater pertama adalah parent context, dan paramater kedua adalah durasi timeout dengan type data `time.Duration`
 
 ```go
 ctx := context.Background()
@@ -128,7 +142,7 @@ defer cancel()
 
 Sama seperti `context.WithValue`, `context.WithTimeout` juga mengembalikan context yang baru, sehingga kita perlu meng-assignnya kembali, selain itu method tersebut juga mengembalikan callback `cancel` yang perlu kite `defer` untuk merelease context jika function yang sedang berjalan telah selesai.
 
-Anggap kita punya kode seperti berikut, mari kita coba implementasi timeout, agar function `processing` bisa kita cancel/batalkan jika kita melewati batas waktu.
+Anggap kita punya kode seperti berikut, mari kita coba implementasi timeout, agar function `processing` bisa kita cancel/batalkan jika melewati batas waktu.
 
 ```go showLineNumbers
 package main
@@ -204,7 +218,8 @@ func processing(ctx context.Context) (int, error)  {
 
 ```
 
-Kemudian perlu kita pindahkan juga logic kode sebelumnya ke dalam goroutine dan kita kirimkan hasil kalkulasi ke channel `resultChan` . 
+Kemudian perlu kita pindahkan juga logic kode sebelumnya ke dalam goroutine dan kita kirimkan hasil kalkulasi ke channel `resultChan`. 
+
 hal ini dilakukan agar eksekusi tidak blocking sehingga operasi select bisa standby untuk menunggu mana operasi yang selesai terlebih dahulu antara channel `resultChan` dan `ctx.Done`.
 
 Untuk mengakses value error dari sebuah context, kita bisa menggunakan `ctx.Err()`
@@ -274,7 +289,7 @@ func processing(ctx context.Context) (int, error) {
 
 ```
 
-Mari kita coba jalankan dimana function `processing` membutuhkan waktu 3 detik sementara timeout kita set 1 detik
+Mari kita coba jalankan dengan kondisi dimana function `processing` membutuhkan waktu 3 detik sementara timeout kita set 1 detik
 
 ```console
 Processing....
@@ -288,7 +303,7 @@ Lalu kita coba ubah timeout menjadi 5 detik seperti berikut
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 ```
 
-ketika dijalankan akan muncul output seperti berikut
+ketika dijalankan kembali maka akan muncul output seperti berikut
 
 ```
 Processing....
@@ -298,7 +313,9 @@ result: 1000
 
 ## Context dengan Deadline
 
-Context deadline relative sama dengan context timeout, perbedaanya hanya pada paramater, ditimeout kita menggunakan durasi dengan type `time.Duration` sementara deadline dengan type `time.Time`. Untuk membuat context kita bisa gunakan kode seperti berikut
+Context deadline relative sama dengan context timeout, perbedaanya hanya pada paramater, ditimeout kita menggunakan durasi dengan type `time.Duration` sementara deadline dengan type `time.Time`. 
+
+Untuk membuat context kita bisa gunakan kode seperti berikut
 
 ```go
 	ctx := context.Background()
@@ -364,7 +381,7 @@ ctx := context.Background()
 ctx, cancel := context.WithCancel(ctx)
 ```
 
-Mari kita coba ubah kode sebelumnya untuk menggunakan `context.WithCancel` menjadi seperti berikut
+Mari kita coba ubah kode sebelumnya agar menggunakan `context.WithCancel` menjadi seperti berikut
 
 ```go
 package main
@@ -465,7 +482,7 @@ func hello(w http.ResponseWriter, req *http.Request) {
 
 Jika kita menjalankan kode diatas, kemudian membuat request ke http://localhost:8000/hello, kemudian secara langsung menghentikan request tersebut, maka channel `ctx.Done()` pada operasi `select` akan tereksekusi dulu yang menandakan user telah menghentikan request
 
-```go  
+```console
 server: hello handler started
 server: context canceled
 server: hello handler ended
@@ -473,7 +490,10 @@ server: hello handler ended
 
 ## Penggunaan context dengan operasi database
 
-Context juga umum dipakai untuk operasi database, hal ini sangat berguna untuk menghentikan operasi database yang terlalu lama, sehingga sistem tidak membuang resource untuk kalkusasi request yang sudah tidak diinginkan misalnya karena timeout.
+Context juga umum dipakai untuk operasi database, hal ini sangat berguna untuk menghentikan operasi database yang melewati timeout atau telah dihentikan oleh user, sehingga resource tidak ada yang terbuang.
+
+Berikut contoh kodenya.
+
 ```go 
 package main
 
@@ -514,6 +534,8 @@ func main() {
 
 ## Kesimpulan
 
-Diartikel ini kita telah belajar bagaimana cara membuat context, menambahkan sebuah value, menambahkan timeout/deadline, dan contoh penggunaanya dikasus http server dan operasi database. Selain itu bisa kita simpulkan pentingnya untuk menangani sebuah timeout/deadline/cancelation agar penggunaan resource menjadi lebih efisien dan tidak ada yang terbuang.
+Diartikel ini kita telah belajar bagaimana cara membuat context, menambahkan sebuah value, menambahkan timeout/deadline, dan contoh penggunaanya dikasus http server dan operasi database. 
 
-Thank for reading
+Selain itu bisa kita simpulkan pentingnya untuk menangani sebuah timeout/deadline/cancelation agar penggunaan resource menjadi lebih efisien dan tidak ada yang terbuang.
+
+Thanks for reading
